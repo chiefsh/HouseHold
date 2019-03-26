@@ -1,0 +1,72 @@
+version: '2'
+services:
+  carol:
+    restart: always
+    image: shield
+    volumes:
+      - ./server:/server
+      - ./etc/web_config.conf:/etc/web_config.conf
+    ports:
+      - "3333"
+    links:
+      - redis
+      - mysql
+    environment:
+      - VIRTUAL_HOST=shield.jianxun.io
+
+  crontab:
+    restart: always
+    image: carol-crontab
+    environment:
+      - CRON_TAIL=true
+    volumes:
+      - ./server:/server
+      - ./server/scripts/crontab:/etc/cron.d/root
+      - ./etc/web_config.conf:/etc/web_config.conf
+    links:
+      - redis
+      - mysql
+
+  redis:
+    restart: always
+    image: redis:alpine
+
+  rabbitmq:
+    restart: always
+    image: rabbitmq:3.7-management-alpine
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+      VIRTUAL_HOST: rabbitmq-shield.jianxun.io
+      VIRTUAL_PORT: 15672
+    ports:
+      - "15672"
+      - "5672"
+    volumes:
+      - ./rabbitmq:/data/mnesia
+
+  mysql:
+    restart: always
+    image: mysql:5.7
+    ports:
+      - "0.0.0.0:33062:3306"
+    volumes:
+      - ./data/mysql/data:/var/lib/mysql
+      - ./data/mysql/conf.d:/etc/mysql/conf.d
+    environment:
+      MYSQL_ROOT_PASSWORD: 'huntcoder2018'
+      TZ: 'Asia/Shanghai'
+
+  proxy:
+    image: jwilder/nginx-proxy:alpine
+    ports:
+      - "8081:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./docker/shield.jianxun.io:/etc/nginx/vhost.d/shield.jianxun.io:ro
+      - ./dist:/var/www/html:ro
+
+
+
