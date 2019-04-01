@@ -12,7 +12,7 @@ class Product(ProductBase):
         select([func.count(Category.name)]).where(and_(Category.category_id == ProductBase.category_id)))
 
     community = column_property(
-        select([func.count(Community.name)]).where(and_(Community.community_id == ProductBase.community)))
+        select([func.count(Community.name)]).where(and_(Community.community_id == ProductBase.community_id)))
 
 
 class ProductModel(MysqlModel):

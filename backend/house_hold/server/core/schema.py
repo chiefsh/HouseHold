@@ -154,3 +154,17 @@ class BasicInfo(Base):
     qr_code = Column(String(512), nullable=False, server_default=text("''"))
     contact = Column(String(512), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))
+
+
+class OrderForm(Base):
+    __tablename__ = "order_form"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(64), nullable=False, server_default=text("''"))
+    telephone = Column(String(15), nullable=False, server_default=text("''"))
+    community_id = Column(Integer, nullable=False, server_default=text("0"))
+    address = Column(String(64), nullable=False, server_default=text("''"))
+    apartment = Column(Integer, nullable=False, server_default=text("0"))
+    product_id = Column(Integer, nullable=False, server_default=text("0"))
+    review_status = Column(Integer, nullable=False, server_default=text("0"))
+    note = Column(String(128), nullable=False, server_default=text("''"))
+    created_at = Column(Integer, nullable=False, server_default=text("0"))
