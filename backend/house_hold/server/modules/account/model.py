@@ -3,7 +3,7 @@ import time
 
 from core.base_model import MysqlModel
 from core.schema import Account, CacheData
-from core.utils import row2dict, hash_password, check_password
+from core.utils import row2dict
 
 
 class AccountModel(MysqlModel):
@@ -45,4 +45,18 @@ class AccountModel(MysqlModel):
         self.session.query(CacheData).filter(CacheData.user_id == user_id).delete()
         self.session.flush()
 
+    def add_account(self, user_name, password):
+        self.session.begin()
+        account = Account(
+            name=user_name,
+            password=password
+        )
+        self.session.add(account)
+        self.session.commit()
+
+    def query_account(self, user_id):
+        account = self.session.query(Account).filter(
+            Account.user_id == user_id
+        ).first()
+        return row2dict(account) if account else ''
 

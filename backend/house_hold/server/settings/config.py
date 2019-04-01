@@ -5,20 +5,20 @@ from tornado.options import define, parse_config_file
 def load_config():
     # 服务器配置
     define("DEBUG", default=True)
-    define("SERVER_PORT", default=3333)
+    define("SERVER_PORT", default=8888)
 
     define("GZIP", default=True)
     define("XHEADERS", default=True)
     # TODO
     define("COOKIE_SECRET", default="__SHIELD__: SHIELD_2018_07_16")
-    define("MODULES", default=['base'])
+    define("MODULES", default=['account', 'image', 'product', 'base'])
 
     define("AUTH_TOKEN_SALT", default="")
     define("SIGNED_SECRET", default="SIGNED_SECRET")
 
     # MySQL 配置
     define("MYSQL", default={
-        "master": "mysql+pymysql://root:huntcoder2014@127.0.0.1:3306/test?charset=utf8",
+        "master": "mysql+pymysql://root:123456@127.0.0.1:3306/house_hold?charset=utf8",
     })
 
     # ElasticSearch 配置

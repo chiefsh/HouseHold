@@ -18,6 +18,7 @@ from .exception import (
     PermissionDenied,
     InternalError,
 )
+from core.schema import CacheData
 
 
 class SessionHandler(RequestHandler):
@@ -103,6 +104,20 @@ def authenticated(method):
             self.set_status(401, "请登录!")
             self.finish({"code": -1, "msg": "请登录!"})
             return None
+        try:
+            model = MysqlModel()
+            cache = model.session.query(CacheData).filter(CacheData.sid == self.current_user).first()
+            if not cache:
+                self.set_status(401, "请登录!")
+                self.finish({"code": -1, "msg": "请登录!"})
+                return None
+            else:
+                if int(cache.deadline) < int(time.time()):
+                    self.set_status(401, "请登录!")
+                    self.finish({"code": -1, "msg": "请登录!"})
+                    return None
+        except Exception as e:
+            logging.error("update visit time and source failed..., and error reason:%r", e)
         return method(self, *args, **kwargs)
     return wrapper
 

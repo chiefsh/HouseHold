@@ -32,6 +32,9 @@ class ProductAddHandler(BaseHandler):
             "msg": "操作成功"
         })
 
+
+class ProductDeleteHandler(BaseHandler):
+
     @authenticated
     @arguments
     def delete(self, product_ids: int = None, model: ProductModel = None):
@@ -41,9 +44,14 @@ class ProductAddHandler(BaseHandler):
             "msg": "操作成功"
         })
 
+
+class ProductQueryHandler(BaseHandler):
+
     @arguments
-    def get(self, page: int = 0, size: int = 20, model: ProductModel = None):
-        result = model.query_one_page(page, size)
+    def get(self, product_id: int = None, page: int = 0, size: int = 20, model: ProductModel = None):
+        result = model.query_one_page(product_id, page, size)
         self.finish({
-            "code":
+            "code": 0,
+            "msg": "success",
+            "data": result
         })

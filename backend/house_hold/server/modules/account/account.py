@@ -1,7 +1,6 @@
 from core.base_handler import BaseHandler, arguments, authenticated
 from core.exception import NotFound, ParametersError
 from .model import AccountModel
-from .form import AccountLoginForm
 
 
 class LoginHandler(BaseHandler):
@@ -45,4 +44,33 @@ class LoginOutHandler(BaseHandler):
         self.finish({
             "code": 0,
             "msg": "操作成功"
+        })
+
+
+class AccountQueryHandler(BaseHandler):
+
+    @authenticated
+    @arguments
+    def get(self, user_id: int = None, model: AccountModel = None):
+        if user_id is None:
+            raise ParametersError()
+        account_info = model.query_account(user_id)
+        self.finish({
+            'code': 0,
+            'msg': "添加成功",
+            'data': account_info
+        })
+
+
+class AccountAddHandler(BaseHandler):
+
+    @authenticated
+    @arguments
+    def post(self, username: str = '', password: str = "", model: AccountModel = None):
+        if not username or not password:
+            raise ParametersError()
+        model.add_account(username, password)
+        self.finish({
+            'code': 0,
+            'msg': "添加成功"
         })

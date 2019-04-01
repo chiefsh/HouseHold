@@ -12,6 +12,7 @@ Base = declarative_base()
 
 class ObjID(BINARY):
     """基于bson.ObjectId用于mysql主键的自定义类型"""
+
     def bind_processor(self, dialect):
         def processor(value):
             return bson.ObjectId(value).binary if bson.ObjectId.is_valid(value) else value
@@ -35,6 +36,7 @@ class ObjID(BINARY):
 
 class JSONStr(String):
     """自动转换 str 和 dict 的自定义类型"""
+
     def bind_processor(self, dialect):
         def processor(value):
             try:
@@ -42,6 +44,7 @@ class JSONStr(String):
             except Exception as e:
                 logging.exception(e)
                 return value
+
         return processor
 
     def result_processor(self, dialect, coltype):
@@ -51,6 +54,7 @@ class JSONStr(String):
             except Exception as e:
                 logging.exception(e)
                 return value
+
         return processor
 
     @staticmethod
@@ -80,15 +84,15 @@ class User(Base):
 
 
 class Account(Base):
-    __tablename__="account"
+    __tablename__ = "account"
     user_id = Column(Integer, primary_key=True)
     name = Column(String(128), nullable=False, server_default=text("''"))
     password = Column(String(128), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))
 
 
-class product(Base):
-    __tablename__="product"
+class Product(Base):
+    __tablename__ = "product"
     product_id = Column(ObjID(12), primary_key=True)
     name = Column(String(128), nullable=False, server_default=text("''"))
     category_id = Column(Integer, nullable=False, server_default=text("0"))
@@ -104,3 +108,49 @@ class product(Base):
     created_at = Column(Integer, nullable=False, server_default=text("0"))
 
 
+class CacheData(Base):
+    __tablename__ = "cache_data"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String(128), nullable=False, server_default=text("''"))
+    sid = Column(String(128), nullable=False, server_default=text("''"))
+    deadline = Column(Integer, nullable=False, server_default=text("0"))
+
+
+class Category(Base):
+    __tablename__ = "category"
+    category_id = Column(Integer, primary_key=True)
+    name = Column(String(64), nullable=False, server_default=text("''"))
+    created_at = Column(Integer, nullable=False, server_default=text("0"))
+
+
+class Community(Base):
+    __tablename__ = 'community'
+    community_id = Column(Integer, primary_key=True)
+    province_id = Column(Integer, nullable=False, server_default=text("0"))
+    city_id = Column(Integer, nullable=False, server_default=text("0"))
+    area = Column(Integer, nullable=False, server_default=text("0"))
+    name = Column(String(128), nullable=False, server_default=text("''"))
+    note = Column(String(512), nullable=False, server_default=text("''"))
+    created_at = Column(Integer, nullable=False, server_default=text("0"))
+
+
+class Region(Base):
+    __tablename__ = "region"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(128), nullable=False, server_default=text("''"))
+    parent_id = Column(Integer, nullable=False, server_default=text("0"))
+
+
+class BasicInfo(Base):
+    __tablename__ = "basic_info"
+    id = Column(Integer, primary_key=True)
+    topic = Column(String(512), nullable=False, server_default=text("''"))
+    viewpager_1 = Column(String(512), nullable=False, server_default=text("''"))
+    viewpager_2 = Column(String(512), nullable=False, server_default=text("''"))
+    viewpager_3 = Column(String(512), nullable=False, server_default=text("''"))
+    viewpager_4 = Column(String(512), nullable=False, server_default=text("''"))
+    viewpager_5 = Column(String(512), nullable=False, server_default=text("''"))
+    ad_image = Column(String(512), nullable=False, server_default=text("''"))
+    qr_code = Column(String(512), nullable=False, server_default=text("''"))
+    contact = Column(String(512), nullable=False, server_default=text("''"))
+    created_at = Column(Integer, nullable=False, server_default=text("0"))
