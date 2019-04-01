@@ -11,7 +11,8 @@ def load_config():
     define("XHEADERS", default=True)
     # TODO
     define("COOKIE_SECRET", default="__SHIELD__: SHIELD_2018_07_16")
-    define("MODULES", default=['account', 'image', 'product', 'base'])
+    define("MODULES", default=['account', 'image', 'product', 'basic', 'category', 'community',
+                               'order_form', 'region', 'base'])
 
     define("AUTH_TOKEN_SALT", default="")
     define("SIGNED_SECRET", default="SIGNED_SECRET")
