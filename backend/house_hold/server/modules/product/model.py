@@ -21,24 +21,24 @@ class ProductModel(MysqlModel):
                     community_id, brief, sell_point, detail, transport_sale):
         self.session.begin()
         if product_id:
-            self.session.query(Product).filter(
-                Product.product_id == product_id
+            self.session.query(ProductBase).filter(
+                ProductBase.product_id == product_id
             ).update({
-                Product.name: name and name or Product.name,
-                Product.category_id: category_id and category_id or Product.category_id,
-                Product.group_price: group_price and group_price or Product.group_price,
-                Product.market_price: market_price and market_price or Product.market_price,
-                Product.charge_unit: charge_unit and charge_unit or Product.charge_unit,
-                Product.group_member: group_member and group_member or Product.group_member,
-                Product.community_id: community_id and community_id or Product.community_id,
-                Product.brief: brief and brief or Product.brief,
-                Product.sell_point: sell_point and sell_point or Product.sell_point,
-                Product.detail: detail and detail or Product.detail,
-                Product.transport_sale: transport_sale and transport_sale or Product.transport_sale,
-                Product.created_at: int(time.time())
+                ProductBase.name: name and name or ProductBase.name,
+                ProductBase.category_id: category_id and category_id or ProductBase.category_id,
+                ProductBase.group_price: group_price and group_price or ProductBase.group_price,
+                ProductBase.market_price: market_price and market_price or ProductBase.market_price,
+                ProductBase.charge_unit: charge_unit and charge_unit or ProductBase.charge_unit,
+                ProductBase.group_member: group_member and group_member or ProductBase.group_member,
+                ProductBase.community_id: community_id and community_id or ProductBase.community_id,
+                ProductBase.brief: brief and brief or ProductBase.brief,
+                ProductBase.sell_point: sell_point and sell_point or ProductBase.sell_point,
+                ProductBase.detail: detail and detail or ProductBase.detail,
+                ProductBase.transport_sale: transport_sale and transport_sale or ProductBase.transport_sale,
+                ProductBase.created_at: int(time.time())
             }, synchronize_session=False)
         else:
-            product = Product(
+            product = ProductBase(
                 name=name,
                 category_id=category_id,
                 group_price=group_price,
@@ -58,11 +58,11 @@ class ProductModel(MysqlModel):
     def delete_product(self, product_ids):
         self.session.begin()
         if not product_ids:
-            self.session.query(Product).delete()
+            self.session.query(ProductBase).delete()
         else:
             for _id in product_ids:
-                self.session.qeury(Product).filter(
-                    Product.product_id == _id
+                self.session.qeury(ProductBase).filter(
+                    ProductBase.product_id == _id
                 ).delete()
         self.session.commit()
 
