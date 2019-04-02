@@ -6,8 +6,8 @@ from .model import RegionModel
 class RegionProvinceQuery(BaseHandler):
 
     @arguments
-    def get(self, model: RegionModel = None):
-        result = model.query_province()
+    def get(self, address_id: int = 0, model: RegionModel = None):
+        result = model.query_province(address_id)
         self.finish({
             "code": 0,
             "msg": "success",

@@ -15,6 +15,7 @@ class ProductAddHandler(BaseHandler):
              category_id: int = None,
              group_price: float = None,
              market_price: float = None,
+             rate: str = '',
              charge_unit: str = "",
              group_member: int = None,
              community_id: int = None,
@@ -22,11 +23,17 @@ class ProductAddHandler(BaseHandler):
              sell_point: str = "",
              detail: str = "",
              transport_sale: str = '',
+             introduction: str = '',
+             image_0: str = '',
+             image_1: str = '',
+             image_2: str = '',
+             image_3: str = '',
+             image_4: str = '',
              model: ProductModel = None
              ):
-        model.add_product(product_id, name, category_id, group_price, market_price, charge_unit, group_member,
-                          community_id,
-                          brief, sell_point, detail, transport_sale)
+        model.add_product(product_id, name, category_id, group_price, market_price, rate, charge_unit, group_member,
+                          community_id, brief, sell_point, detail, transport_sale, introduction, image_0, image_1,
+                          image_2, image_3, image_4)
         self.finish({
             "code": 0,
             "msg": "操作成功"

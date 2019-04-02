@@ -5,9 +5,9 @@ from core.utils import row2dict
 
 class RegionModel(MysqlModel):
 
-    def query_province(self):
+    def query_province(self, address_id):
         result = self.session.query(Region).filter(
-            Region.parent_id == 0
+            Region.parent_id == address_id
         ).all()
         return [row2dict(item) for item in result] if result else []
 

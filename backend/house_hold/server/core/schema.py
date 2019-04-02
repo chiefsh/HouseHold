@@ -105,6 +105,11 @@ class Product(Base):
     sell_point = Column(String(128), nullable=False, server_default=text("''"))
     detail = Column(String(1024), nullable=False, server_default=text("''"))
     transport_sale = Column(String(128), nullable=False, server_default=text("''"))
+    image_0 = Column(String(128), nullable=False, server_default=text("''"))
+    image_1 = Column(String(128), nullable=False, server_default=text("''"))
+    image_2 = Column(String(128), nullable=False, server_default=text("''"))
+    image_3 = Column(String(128), nullable=False, server_default=text("''"))
+    image_4 = Column(String(128), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))
 
 

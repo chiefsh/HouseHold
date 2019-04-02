@@ -11,12 +11,12 @@ class OrderFormAddHandler(BaseHandler):
              community_id: int = None,
              address: str = '',
              apartment: int = None,
-             product_id: int = None,
+             product_ids: int = None,
              model: OrderFormModel = None
              ):
-        if not name or not telephone or not address or not product_id:
+        if not name or not telephone or not address or not product_ids:
             raise ParametersError()
-        model.add_order_form(name, telephone, community_id, address, apartment, product_id)
+        model.add_order_form(name, telephone, community_id, address, apartment, product_ids)
         self.finish({
             "code": 0,
             "msg": "success",
@@ -27,7 +27,7 @@ class OrderFormCheckHandler(BaseHandler):
 
     @authenticated
     @arguments
-    def post(self, order_id:int = None, note: str = '', review_status: int = 0, model: OrderFormModel = None):
+    def post(self, order_id: int = None, note: str = '', review_status: int = 0, model: OrderFormModel = None):
         if order_id is None:
             raise ParametersError()
         model.update_order_form(order_id, note, review_status)

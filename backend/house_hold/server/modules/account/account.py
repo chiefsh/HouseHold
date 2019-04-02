@@ -27,7 +27,7 @@ class LoginHandler(BaseHandler):
             })
 
         self.finish({
-            "code": 0,
+            "code": -1,
             "msg": "账户名或密码错误！"
         })
 
