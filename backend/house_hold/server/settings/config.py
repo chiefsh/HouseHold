@@ -19,7 +19,7 @@ def load_config():
 
     # MySQL 配置
     define("MYSQL", default={
-        "master": "mysql+pymysql://root:123456@127.0.0.1:3306/house_hold?charset=utf8",
+        "master": "mysql+pymysql://root:House_hold2019@127.0.0.1:3306/house_hold?charset=utf8",
     })
 
     # ElasticSearch 配置

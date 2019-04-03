@@ -84,7 +84,7 @@ class ProductModel(MysqlModel):
     def query_one_page(self, product_id, page, size):
         # 带转换类型和社区名，relationship
         if product_id is None:
-            query = self.session.qeury(Product)
+            query = self.session.query(Product)
             result = self.query_one_page(query, page, size)
             return [row2dict(item) for item in result] if result else []
         else:
