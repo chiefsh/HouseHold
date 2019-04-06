@@ -9,7 +9,7 @@ class ImageUploadHandler(BaseHandler):
 
     @arguments
     def post(self, model: ImageModel = None):
-        imgfile = self.request.files.get('files')
+        imgfile = self.request.files.get('file')
         if not imgfile:
             raise ParametersError("参数错误")
         img_name = model.upload_image(imgfile)
@@ -22,6 +22,7 @@ class ImageUploadHandler(BaseHandler):
 
 class ImageDownloadHandler(BaseHandler):
 
+    @arguments
     def get(self, image_name: str = "", model: ImageModel = None):
         if not image_name:
             raise ParametersError("参数错误")
@@ -30,7 +31,8 @@ class ImageDownloadHandler(BaseHandler):
 
 
 class ImageDeleteHandler(BaseHandler):
-
+    
+    @arguments
     def delete(self, image_name: str = "", model: ImageModel = None):
         if not image_name:
             raise ParametersError("参数错误")
