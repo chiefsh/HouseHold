@@ -76,7 +76,7 @@ class ProductModel(MysqlModel):
             self.session.query(ProductBase).delete()
         else:
             for _id in product_ids:
-                self.session.qeury(ProductBase).filter(
+                self.session.query(ProductBase).filter(
                     ProductBase.product_id == _id
                 ).delete()
         self.session.commit()
@@ -88,7 +88,7 @@ class ProductModel(MysqlModel):
             result = self.query_one_page(query, page, size)
             return [row2dict(item) for item in result] if result else []
         else:
-            result = self.session.qeury(Product).filter(
+            result = self.session.query(Product).filter(
                 Product.product_id == product_id
             ).first()
             return row2dict(result) if result else ''

@@ -2,6 +2,7 @@ import json
 import logging
 import functools
 import uuid
+import time
 from inspect import getfullargspec, iscoroutinefunction
 from tornado.gen import is_coroutine_function
 from tornado.options import options
@@ -27,9 +28,7 @@ class SessionHandler(RequestHandler):
         """根据cookie信息从redis中获取用户身份"""
         session_id = self.request.headers.get('X-Session-Id') or self.get_cookie('__sid__')
         if session_id:
-            user_id = redis_cli().get('{}:sid:{}'.format(options.REDIS_NAMESPACE, session_id))
-            if user_id:
-                return user_id.decode()
+            return session_id
         return None
 
     def gen_session_id(self, user_id=''):
