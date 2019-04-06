@@ -81,7 +81,7 @@ class ProductModel(MysqlModel):
                 ).delete()
         self.session.commit()
 
-    def query_one_page(self, product_id, page, size):
+    def query_product(self, product_id, page, size):
         # 带转换类型和社区名，relationship
         if product_id is None:
             query = self.session.query(Product)
