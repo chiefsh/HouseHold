@@ -10,12 +10,15 @@ from core.base_model import MysqlModel
 class ImageModel(MysqlModel):
 
     def upload_image(self, imgfile):
-        # 避免重复文件名
-        img_name = str(int(time.time())) + imgfile['filename'].split('.')[-1]
-        image_path = os.path.join(BASE_IMAGE_PATH, img_name)
-        with open(image_path, 'wb') as f:
-            f.write(imgfile['body'])
-        return img_name
+        img_list = []
+        for file in imgfile:
+            # 避免重复文件名
+            img_name = str(int(time.time() * 1000)) + "." + file['filename'].split('.')[-1]
+            image_path = os.path.join(BASE_IMAGE_PATH, img_name)
+            with open(image_path, 'wb') as f:
+                f.write(file['body'])
+            img_list.append(img_name)
+        return img_list
 
     def download_image(self, image_name):
         if check_file_exist(image_name):
