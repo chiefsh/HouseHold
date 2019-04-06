@@ -47,7 +47,7 @@ class OrderFormModel(MysqlModel):
         self.session.commit()
 
     def query_all_order_form(self, review_status, page, size):
-        query = self.session.query(OrderFormNew).filer(
+        query = self.session.query(OrderFormNew).filter(
             OrderForm.review_status == review_status
         )
         result = self.query_one_page(query, page, size)

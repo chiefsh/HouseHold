@@ -4,9 +4,10 @@ import sys
 
 from core.utils import delete_image_file, check_file_exist
 from settings.constant import BASE_IMAGE_PATH
+from core.base_model import MysqlModel
 
 
-class ImageModel(object):
+class ImageModel(MysqlModel):
 
     def upload_image(self, imgfile):
         # 避免重复文件名
