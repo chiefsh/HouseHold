@@ -9,10 +9,10 @@ from core.utils import row2dict
 
 class Product(ProductBase):
     category = column_property(
-        select([func.count(Category.name)]).where(and_(Category.category_id == ProductBase.category_id)))
+        select([Category.name]).where(and_(Category.category_id == ProductBase.category_id)))
 
     community = column_property(
-        select([func.count(Community.name)]).where(and_(Community.community_id == ProductBase.community_id)))
+        select([Community.name]).where(and_(Community.community_id == ProductBase.community_id)))
 
 
 class ProductModel(MysqlModel):
