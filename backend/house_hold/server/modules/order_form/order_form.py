@@ -48,3 +48,15 @@ class OrderFormQueryHandler(BaseHandler):
             "msg": 'success',
             "data": result
         })
+
+
+class OrderFormDeleteHandler(BaseHandler):
+
+    @authenticated
+    @arguments
+    def delete(self, order_ids: int = None, model: OrderFormModel = None):
+        model.delete_order_form(order_ids)
+        self.finish({
+            "code": 0,
+            "msg": 'success',
+        })

@@ -52,3 +52,7 @@ class OrderFormModel(MysqlModel):
         )
         result = self.query_one_page(query, page, size)
         return [row2dict(item) for item in result] if result else []
+
+    def delete_order_form(self, order_ids):
+        for id_ in order_ids:
+            self.session.query(OrderForm).filter(OrderForm.id == int(id_)).delete()
