@@ -1,0 +1,9 @@
+*.pyc
+__pycache__
+.idea
+.DS_store
+
+etc
+node_modules
+backend/house_hold/server/src
+

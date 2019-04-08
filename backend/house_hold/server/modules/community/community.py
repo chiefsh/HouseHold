@@ -10,7 +10,7 @@ class CommunityAddHandler(BaseHandler):
     def post(self, community_id: int = None, province_id: int = None, city_id: int = None, area: int = None,
              name: str = '', note: str = '',
              model: CommunityModel = None):
-        if not province_id or not city_id:
+        if province_id is None or city_id is None:
             raise ParametersError()
         model.add_community(community_id, province_id, city_id, area, name, note)
         self.finish({
@@ -22,7 +22,7 @@ class CommunityAddHandler(BaseHandler):
 class CommunityQueryHandler(BaseHandler):
 
     @arguments
-    def post(self, community_id: int = None, page: int = 0, size=20, model=CommunityModel):
+    def get(self, community_id: int = None, page: int = 0, size: int=20, model:CommunityModel=None):
         result, total = model.query_community_info(community_id, page, size)
         self.finish({
             "code": 0,

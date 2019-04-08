@@ -1,3 +1,5 @@
+import logging
+
 from core.base_handler import BaseHandler, arguments, authenticated
 from core.exception import NotFound, ParametersError
 from .model import AccountModel
@@ -19,7 +21,7 @@ class LoginHandler(BaseHandler):
                 expires_days=30,  # 过期时间设置为1个月
             )
             self.set_header('X-Session-Id', sid)
-            print("sid::::", self.get_secure_cookie("__sid__"))
+            logging.info("sid::::%r", self.get_secure_cookie("__sid__"))
             return self.finish({
                 "code": 0,
                 "msg": "登录成功",

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship, joinedload, lazyload, column_property, 
 from sqlalchemy import select, outerjoin, or_, func, and_, between, desc, join
 
 from core.base_model import MysqlModel
-from core.schema import Product as ProductBase, Community, Category
+from core.schema import Product as ProductBase, Community, Category, ObjID
 from core.utils import row2dict
 
 
@@ -31,7 +31,7 @@ class ProductModel(MysqlModel):
                 ProductBase.market_price: market_price and market_price or ProductBase.market_price,
                 ProductBase.rate: rate and rate or ProductBase.rate,
                 ProductBase.charge_unit: charge_unit and charge_unit or ProductBase.charge_unit,
-                ProductBase.group_member: group_member and group_member or ProductBase.group_member,
+                ProductBase.group_number: group_member and group_member or ProductBase.group_number,
                 ProductBase.community_id: community_id and community_id or ProductBase.community_id,
                 ProductBase.brief: brief and brief or ProductBase.brief,
                 ProductBase.sell_point: sell_point and sell_point or ProductBase.sell_point,
@@ -47,12 +47,13 @@ class ProductModel(MysqlModel):
             }, synchronize_session=False)
         else:
             product = ProductBase(
+                product_id= ObjID.new_id(),
                 name=name,
                 category_id=category_id,
                 group_price=group_price,
                 market_price=market_price,
                 charge_unit=charge_unit,
-                group_member=group_member,
+                group_number=group_member,
                 community_id=community_id,
                 rate=rate,
                 brief=brief,
