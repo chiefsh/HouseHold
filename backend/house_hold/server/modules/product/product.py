@@ -32,6 +32,8 @@ class ProductAddHandler(BaseHandler):
              image_4: str = '',
              model: ProductModel = None
              ):
+        if category_id is None or group_price is None or market_price is None or group_member is None or community_id is None:
+            raise ParametersError()
         model.add_product(product_id, name, category_id, group_price, market_price, rate, charge_unit, group_member,
                           community_id, brief, sell_point, detail, transport_sale, introduction, image_0, image_1,
                           image_2, image_3, image_4)
