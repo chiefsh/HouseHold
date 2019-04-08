@@ -49,9 +49,8 @@
 					"data": {"image_name": img_name}
 				  }
 	   
-	2）url     ： /api/image/download  图片下载   （待定，可能直接使用nginx做动静分离）
-	   请求方式： get
-	   参    数： image_name     str: 图片名称
+	2）url     ： http://94.191.23.153/images/1554536485383.gif  图片下载   （后面是图片上传接口返回的img_name）
+	   请求方式： get  (可直接通过src属性展示图片)
 	   返    回： 二进制流
 	   
 	3）url     ： /api/image/delete     图片删除
