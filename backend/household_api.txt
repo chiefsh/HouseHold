@@ -188,13 +188,32 @@
 	              {
                   "code": 0,
                   "msg": "success",
+                  "total": 0,
 				  "data": {"product_id":1,"name":'圣象地板',"category":"地板","group_price":12.5,"market_price":11.5,"charge_unit":"$","group_member":3,"community":"洪山区","brief":'',"sell_point":'',"detail":'',"transport_sale":'',"image_0":'',"image_1":'',"image_2":'',"image_3":'',"image_4":'',"created_at":1568974854}
                   }
 			   列表：
 	              {
                   "code": 0,
                   "msg": "success",
+                  "total": 31,
 				  "data": [{"product_id":1,"name":'圣象地板',"category":"地板","group_price":12.5,"market_price":11.5,"charge_unit":"$","group_member":3,"community":"洪山区","brief":'',"sell_point":'',"detail":'',"transport_sale":'',"image_0":'',"image_1":'',"image_2":'',"image_3":'',"image_4":'',"created_at":1568974854},{"product_id":1,"name":'圣象地板',"category":"地板","group_price":12.5,"market_price":11.5,"charge_unit":"$","group_member":3,"community":"洪山区","brief":'',"sell_point":'',"detail":'',"transport_sale":'',"image_0":'',"image_1":'',"image_2":'',"image_3":'',"image_4":'',"created_at":1568974854}]
+                  }
+    4）url     : /api/product/is_top    置顶
+       请求方式： post
+       参    数： product_id        :int，有,查询单个产品，无，列表
+                  is_top            :int, 是否置顶，1为置顶
+       返    回： {
+                  "code": 0,
+                  "msg": "success",
+                  }
+
+    5）url     : /api/product/up       上移
+       请求方式： post
+       参    数： above_product_id    :int,所选中的产品之上的产品id
+                  under_product_id    :int,所选中的产品id
+       返    回： {
+                  "code": 0,
+                  "msg": "success",
                   }
 				  
 6、地区

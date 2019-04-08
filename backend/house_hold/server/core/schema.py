@@ -93,7 +93,7 @@ class Account(Base):
 
 class Product(Base):
     __tablename__ = "product"
-    product_id = Column(ObjID(12), primary_key=True)
+    product_id = Column(ObjID(12))
     name = Column(String(128), nullable=False, server_default=text("''"))
     category_id = Column(Integer, nullable=False, server_default=text("0"))
     group_price = Column(Float, nullable=False, server_default=text("0"))
@@ -112,6 +112,8 @@ class Product(Base):
     image_3 = Column(String(128), nullable=False, server_default=text("''"))
     image_4 = Column(String(128), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))
+    is_top = Column(Integer, nullable=False, server_default=text("0"))
+    rank = Column(Integer, primary_key=True)
 
 
 class CacheData(Base):

@@ -85,7 +85,7 @@ class ProductModel(MysqlModel):
         # 带转换类型和社区名，relationship
         if product_id is None:
             count = self.session.query(func.count(Product.product_id)).scalar()
-            query = self.session.query(Product)
+            query = self.session.query(Product).order_by(Product.is_top.desc(), Product.rank.asc())
             result = self.query_one_page(query, page, size)
             return [row2dict(item) for item in result] if result else [], count
         else:
@@ -93,3 +93,28 @@ class ProductModel(MysqlModel):
                 Product.product_id == product_id
             ).first()
             return row2dict(result) if result else '', 0
+
+    def top_product(self, product_id, is_top):
+        if is_top:
+            self.session.begin()
+            self.session.query(ProductBase).filter(
+                ProductBase.product_id == product_id
+            ).update({
+                ProductBase.is_top: int(time.time())
+            }, synchronize_session=False)
+            self.session.commit()
+
+    def sorted_product_list(self, above_product_id, under_product_id):
+        self.session.begin()
+        above_rank = self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).first()
+        under_rank = self.session.query(ProductBase.rank).filter(ProductBase.product_id == under_product_id).first()
+        if not (above_rank and under_rank):
+            return
+        self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).update({
+            ProductBase.rank: under_rank[0]
+        }, synchronize_session=False)
+        self.session.query(ProductBase.rank).filter(ProductBase.product_id == under_product_id).update({
+            ProductBase.rank: above_rank[0]
+        }, synchronize_session=False)
+        self.session.flush()
+
