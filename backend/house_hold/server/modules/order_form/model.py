@@ -51,7 +51,8 @@ class OrderFormModel(MysqlModel):
             OrderForm.review_status == review_status
         )
         result = self.query_one_page(query, page, size)
-        return [row2dict(item) for item in result] if result else []
+        total = self.query_total(query)
+        return [row2dict(item) for item in result] if result else [], total
 
     def delete_order_form(self, order_ids):
         for id_ in order_ids:

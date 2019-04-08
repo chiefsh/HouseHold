@@ -84,11 +84,12 @@ class ProductModel(MysqlModel):
     def query_product(self, product_id, page, size):
         # 带转换类型和社区名，relationship
         if product_id is None:
+            count = self.session.query(func.count(Product.product_id)).scalar()
             query = self.session.query(Product)
             result = self.query_one_page(query, page, size)
-            return [row2dict(item) for item in result] if result else []
+            return [row2dict(item) for item in result] if result else [], count
         else:
             result = self.session.query(Product).filter(
                 Product.product_id == product_id
             ).first()
-            return row2dict(result) if result else ''
+            return row2dict(result) if result else '', 0

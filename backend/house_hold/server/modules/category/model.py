@@ -28,12 +28,14 @@ class CategoryModel(MysqlModel):
             query = self.session.query(Category)
             result = self.query_one_page(query, page, size)
             data = [row2dict(item) for item in result] if result else []
+            total = self.query_total(query)
         else:
             result = self.session.query(Category).filter(
                 Category.category_id == category_id
             ).first()
             data = row2dict(result) if result else ''
-        return data
+            total = 0
+        return data, total
 
     def delete_category(self, category_id):
         self.session.query(Category).filter(Category.category_id == category_id).delete()

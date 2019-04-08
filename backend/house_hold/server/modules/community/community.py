@@ -23,11 +23,12 @@ class CommunityQueryHandler(BaseHandler):
 
     @arguments
     def post(self, community_id: int = None, page: int = 0, size=20, model=CommunityModel):
-        result = model.query_community_info(community_id, page, size)
+        result, total = model.query_community_info(community_id, page, size)
         self.finish({
             "code": 0,
             "msg": 'success',
-            "data": result
+            "data": result,
+            "total": total
         })
 
 

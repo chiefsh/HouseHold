@@ -42,11 +42,12 @@ class OrderFormQueryHandler(BaseHandler):
     @authenticated
     @arguments
     def get(self, review_status: int = None, page: int = 0, size: int = 20, model: OrderFormModel = None):
-        result = model.query_all_order_form(review_status, page, size)
+        result, total = model.query_all_order_form(review_status, page, size)
         self.finish({
             "code": 0,
             "msg": 'success',
-            "data": result
+            "data": result,
+            "total": total
         })
 
 

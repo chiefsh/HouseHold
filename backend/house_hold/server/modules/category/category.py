@@ -21,11 +21,12 @@ class CategoryQueryHandler(BaseHandler):
 
     @arguments
     def get(self, category_id: int = None, page: int = 0, size: int = 20, model: CategoryModel = None):
-        data = model.query_category(category_id, page, size)
+        data, total = model.query_category(category_id, page, size)
         self.finish({
             "code": 0,
             "msg": 'success',
-            "data": data
+            "data": data,
+            "total": total
         })
 
 

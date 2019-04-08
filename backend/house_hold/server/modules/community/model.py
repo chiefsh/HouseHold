@@ -38,6 +38,7 @@ class CommunityModel(MysqlModel):
     def query_community_info(self, community_id, page, size):
         if community_id is None:
             query = self.session.query(Community)
+            total = self.query_total(query)
             result = self.query_one_page(query, page, size)
             data = [row2dict(item) for item in result] if result else []
             for item in data:
@@ -53,7 +54,8 @@ class CommunityModel(MysqlModel):
                 data['province'] = self.get_region_name(data['province_id'])
                 data['city'] = self.get_region_name(data['city_id'])
                 data['area_name'] = self.get_region_name(data['area'])
-        return data
+            total = 0
+        return data, total
 
     def delete_community(self, community_ids):
         for id_ in community_ids:

@@ -56,9 +56,10 @@ class ProductQueryHandler(BaseHandler):
 
     @arguments
     def get(self, product_id: int = None, page: int = 0, size: int = 20, model: ProductModel = None):
-        result = model.query_product(product_id, page, size)
+        result, total = model.query_product(product_id, page, size)
         self.finish({
             "code": 0,
             "msg": "success",
-            "data": result
+            "data": result,
+            "total": total
         })
