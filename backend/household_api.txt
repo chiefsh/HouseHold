@@ -82,12 +82,14 @@
 	             {
                   "code": 0,
                   "msg": "success",
+                  "total": 0,
 				  "data": {"category_id": 1, "name":"地板", "created_at":1568974854}
                  }
 				 列表：
 				 {
                   "code": 0,
                   "msg": "success",
+                  "total": 2,
 				  "data": [{"category_id": 1, "name":"地板", "created_at":1568974854}, {"category_id": 1, "name":"地板", "created_at":1568974854}]
                  }
 				 
