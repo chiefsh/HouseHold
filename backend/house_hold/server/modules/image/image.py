@@ -33,7 +33,7 @@ class ImageDownloadHandler(BaseHandler):
 class ImageDeleteHandler(BaseHandler):
     
     @arguments
-    def delete(self, image_name: str = "", model: ImageModel = None):
+    def post(self, image_name: str = "", model: ImageModel = None):
         if not image_name:
             raise ParametersError("参数错误")
         result = model.delete_image(image_name)

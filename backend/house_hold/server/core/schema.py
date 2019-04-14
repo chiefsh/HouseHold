@@ -86,7 +86,7 @@ class User(Base):
 class Account(Base):
     __tablename__ = "account"
     user_id = Column(Integer, primary_key=True)
-    name = Column(String(128), nullable=False, server_default=text("''"))
+    username = Column(String(128), nullable=False, server_default=text("''"))
     password = Column(String(128), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))
 
@@ -95,7 +95,7 @@ class Product(Base):
     __tablename__ = "product"
     product_id = Column(ObjID(12))
     name = Column(String(128), nullable=False, server_default=text("''"))
-    category_id = Column(Integer, nullable=False, server_default=text("0"))
+    category_ids = Column(String(128), nullable=False, server_default=text("0"))
     group_price = Column(Float, nullable=False, server_default=text("0"))
     market_price = Column(Float, nullable=False, server_default=text("0"))
     charge_unit = Column(String(15), nullable=False, server_default=text("''"))
@@ -138,6 +138,11 @@ class Community(Base):
     province_id = Column(Integer, nullable=False, server_default=text("0"))
     city_id = Column(Integer, nullable=False, server_default=text("0"))
     area = Column(Integer, nullable=False, server_default=text("0"))
+    viewpager_0 = Column(String(64), nullable=False, server_default=text("''"))
+    viewpager_1 = Column(String(64), nullable=False, server_default=text("''"))
+    viewpager_2 = Column(String(64), nullable=False, server_default=text("''"))
+    viewpager_3 = Column(String(64), nullable=False, server_default=text("''"))
+    ad_image = Column(String(64), nullable=False, server_default=text("''"))
     name = Column(String(128), nullable=False, server_default=text("''"))
     note = Column(String(512), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))
@@ -154,12 +159,6 @@ class BasicInfo(Base):
     __tablename__ = "basic_info"
     id = Column(Integer, primary_key=True)
     topic = Column(String(512), nullable=False, server_default=text("''"))
-    viewpager_1 = Column(String(512), nullable=False, server_default=text("''"))
-    viewpager_2 = Column(String(512), nullable=False, server_default=text("''"))
-    viewpager_3 = Column(String(512), nullable=False, server_default=text("''"))
-    viewpager_4 = Column(String(512), nullable=False, server_default=text("''"))
-    viewpager_5 = Column(String(512), nullable=False, server_default=text("''"))
-    ad_image = Column(String(512), nullable=False, server_default=text("''"))
     qr_code = Column(String(512), nullable=False, server_default=text("''"))
     contact = Column(String(512), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))

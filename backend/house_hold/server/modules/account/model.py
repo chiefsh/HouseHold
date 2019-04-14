@@ -9,7 +9,7 @@ from core.utils import row2dict
 class AccountModel(MysqlModel):
 
     def login(self, name, password):
-        account = self.session.query(Account).filter(Account.name == name).first()
+        account = self.session.query(Account).filter(Account.username == name).first()
         if not account:
             return False
         else:
@@ -45,18 +45,28 @@ class AccountModel(MysqlModel):
         self.session.query(CacheData).filter(CacheData.user_id == user_id).delete()
         self.session.flush()
 
-    def add_account(self, user_name, password):
+    def add_account(self, user_id, user_name, password):
         self.session.begin()
-        account = Account(
-            name=user_name,
-            password=password
-        )
-        self.session.add(account)
+        if user_id is None:
+            account = Account(
+                username=user_name,
+                password=password
+            )
+            self.session.add(account)
+        else:
+            self.session.query(Account).filter(Account.user_id==user_id).update({Account.username:user_name, Account.password:password})
         self.session.commit()
 
     def query_account(self, user_id):
-        account = self.session.query(Account).filter(
-            Account.user_id == user_id
-        ).first()
-        return row2dict(account) if account else ''
+        if user_id is None:
+            result = self.session.query(Account).all()
+            return [row2dict(item) for item in result] if result else ''
+        else:
+            account = self.session.query(Account).filter(
+                Account.user_id == user_id
+            ).first()
+            return row2dict(account) if account else ''
 
+    def delete_account(self, user_id):
+        self.session.query(Account).filter(Account.user_id==user_id).delete()
+        self.session.flush()

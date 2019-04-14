@@ -34,10 +34,11 @@ class CategoryDeleteHandler(BaseHandler):
 
     @authenticated
     @arguments
-    def delete(self, category_id: int = None, model: CategoryModel = None):
-        if category_id is None:
+    def post(self, category_ids: str = None, model: CategoryModel = None):
+        if category_ids is None:
             raise ParametersError()
-        model.delete_category(category_id)
+        category_ids = category_ids.split(",")
+        model.delete_category(category_ids)
         self.finish({
             "code": 0,
             "msg": '操作成功',

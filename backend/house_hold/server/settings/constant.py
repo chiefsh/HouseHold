@@ -8,5 +8,5 @@ LOG_KW = {
 SESSION_CACHE_EXPIRE = 600
 
 
-BASE_IMAGE_PATH = "server/src"
+BASE_IMAGE_PATH = "/home/house/HouseHold/backend/house_hold/server/src"
 

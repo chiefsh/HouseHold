@@ -11,14 +11,14 @@ class ProductAddHandler(BaseHandler):
     @authenticated
     @arguments
     def post(self,
-             product_id: int = None,
+             product_id: str = None,
              name: str = "",
-             category_id: int = None,
+             category_id: str = '',
              group_price: float = None,
              market_price: float = None,
              rate: str = '',
              charge_unit: str = "",
-             group_member: int = None,
+             group_number: int = None,
              community_id: int = None,
              brief: str = "",
              sell_point: str = "",
@@ -32,9 +32,11 @@ class ProductAddHandler(BaseHandler):
              image_4: str = '',
              model: ProductModel = None
              ):
-        if category_id is None or group_price is None or market_price is None or group_member is None or community_id is None:
+        if group_price is None or market_price is None or group_number is None or community_id is None:
             raise ParametersError()
-        model.add_product(product_id, name, category_id, group_price, market_price, rate, charge_unit, group_member,
+        if not category_id:
+            category_id = "1"
+        model.add_product(product_id, name, category_id, group_price, market_price, rate, charge_unit, group_number,
                           community_id, brief, sell_point, detail, transport_sale, introduction, image_0, image_1,
                           image_2, image_3, image_4)
         self.finish({
@@ -47,7 +49,8 @@ class ProductDeleteHandler(BaseHandler):
 
     @authenticated
     @arguments
-    def delete(self, product_ids: int = None, model: ProductModel = None):
+    def post(self, product_ids: str = '', model: ProductModel = None):
+        product_ids = product_ids.split(",")
         model.delete_product(product_ids)
         self.finish({
             "code": 0,

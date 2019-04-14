@@ -7,13 +7,18 @@ from core.utils import row2dict
 
 class CommunityModel(MysqlModel):
 
-    def add_community(self, community_id, province_id, city_id, area, name, note):
+    def add_community(self, community_id, province_id, city_id, area, viewpager_0, viewpager_1, viewpager_2, viewpager_3, ad_image,  name, note):
         self.session.begin()
         if community_id is None:
             community = Community(
                 province_id=province_id,
                 city_id=city_id,
                 area=area,
+                viewpager_0=viewpager_0,
+                viewpager_1=viewpager_1,
+                viewpager_2=viewpager_2,
+                viewpager_3=viewpager_3,
+                ad_image=ad_image,
                 name=name,
                 note=note,
                 created_at=int(time.time())
@@ -26,6 +31,11 @@ class CommunityModel(MysqlModel):
                 province_id: province_id and province_id or Community.province_id,
                 city_id: city_id and city_id or Community.city_id,
                 area: area and area or Community.area,
+                viewpager_0: viewpager_0 and viewpager_0 or Community.viewpager_0,
+                viewpager_1: viewpager_1 and viewpager_1 or Community.viewpager_1,
+                viewpager_2: viewpager_2 and viewpager_2 or Community.viewpager_2,
+                viewpager_3: viewpager_3 and viewpager_3 or Community.viewpager_3,
+                ad_image: ad_image and ad_image or Community.ad_image,
                 name: name and name or Community.name,
                 note: note and note or Community.note,
             })

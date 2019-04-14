@@ -1,4 +1,4 @@
-from .account import LoginHandler, LoginOutHandler, AccountAddHandler, AccountQueryHandler
+from .account import LoginHandler, LoginOutHandler, AccountAddHandler, AccountQueryHandler, AccountDeleteHandler
 
 
 
@@ -7,4 +7,5 @@ urls = [
     ("/api/loginout", LoginOutHandler),
     ("/api/account/add", AccountAddHandler),
     ("/api/account/query", AccountQueryHandler),
+    ("/api/account/delete", AccountDeleteHandler)
 ]

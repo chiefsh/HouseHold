@@ -8,8 +8,8 @@ from core.utils import row2dict
 
 
 class Product(ProductBase):
-    category = column_property(
-        select([Category.name]).where(and_(Category.category_id == ProductBase.category_id)))
+    #category = column_property(
+    #    select([Category.name]).where(and_(Category.category_id == ProductBase.category_id))
 
     community = column_property(
         select([Community.name]).where(and_(Community.community_id == ProductBase.community_id)))
@@ -26,7 +26,7 @@ class ProductModel(MysqlModel):
                 ProductBase.product_id == product_id
             ).update({
                 ProductBase.name: name and name or ProductBase.name,
-                ProductBase.category_id: category_id and category_id or ProductBase.category_id,
+                ProductBase.category_ids: category_id and category_id or ProductBase.category_ids,
                 ProductBase.group_price: group_price and group_price or ProductBase.group_price,
                 ProductBase.market_price: market_price and market_price or ProductBase.market_price,
                 ProductBase.rate: rate and rate or ProductBase.rate,
@@ -49,7 +49,7 @@ class ProductModel(MysqlModel):
             product = ProductBase(
                 product_id= ObjID.new_id(),
                 name=name,
-                category_id=category_id,
+                category_ids=category_id,
                 group_price=group_price,
                 market_price=market_price,
                 charge_unit=charge_unit,
@@ -73,13 +73,10 @@ class ProductModel(MysqlModel):
 
     def delete_product(self, product_ids):
         self.session.begin()
-        if not product_ids:
-            self.session.query(ProductBase).delete()
-        else:
-            for _id in product_ids:
-                self.session.query(ProductBase).filter(
-                    ProductBase.product_id == _id
-                ).delete()
+        for _id in product_ids:
+            self.session.query(ProductBase).filter(
+                ProductBase.product_id == _id
+            ).delete()
         self.session.commit()
 
     def query_product(self, product_id, page, size):
@@ -88,12 +85,19 @@ class ProductModel(MysqlModel):
             count = self.session.query(func.count(Product.product_id)).scalar()
             query = self.session.query(Product).order_by(Product.is_top.desc(), Product.rank.asc())
             result = self.query_one_page(query, page, size)
-            return [row2dict(item) for item in result] if result else [], count
+            data = [row2dict(item) for item in result] if result else []
+            for item in data:
+                import json
+                item["category_id"]=json.dumps(item["category_ids"].split(","))
+            return data, count
         else:
             result = self.session.query(Product).filter(
                 Product.product_id == product_id
             ).first()
-            return row2dict(result) if result else '', 0
+            data = row2dict(result) if result else ''
+            if data:
+                data['category_id'] = data['category_ids'].split(",")
+            return data, 0
 
     def top_product(self, product_id, is_top):
         if is_top:
