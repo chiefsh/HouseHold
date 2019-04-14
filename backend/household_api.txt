@@ -22,12 +22,14 @@
 					{
 					  "code": 0,
 					  "msg": "success",
+					  "total": 0,
 					  "data": {"community_id":1, "province_id":1, "city_id":1, "area":1, "name":"洪山","note":"", "created_at":1568974854, "province":"湖北","city":"武汉","area_name":"洪山区"}
 					}
 				列表：
 				    {
 					  "code": 0,
 					  "msg": "success",
+					  "total": 2,
 					  "data": [{"community_id":1, "province_id":1, "city_id":1, "area":1, "name":"洪山","note":"", "created_at":1568974854, "province":"湖北","city":"武汉","area_name":"洪山区"}, {"community_id":1, "province_id":1, "city_id":1, "area":1, "name":"洪山","note":"", "created_at":1568974854, "province":"湖北","city":"武汉","area_name":"洪山区"}]
 					}
 				  
@@ -80,12 +82,14 @@
 	             {
                   "code": 0,
                   "msg": "success",
+                  "total": 0,
 				  "data": {"category_id": 1, "name":"地板", "created_at":1568974854}
                  }
 				 列表：
 				 {
                   "code": 0,
                   "msg": "success",
+                  "total": 2,
 				  "data": [{"category_id": 1, "name":"地板", "created_at":1568974854}, {"category_id": 1, "name":"地板", "created_at":1568974854}]
                  }
 				 
@@ -294,5 +298,6 @@
 	             {
 					"code": 0,
 					"msg": "success",
+					"total": 2,
 					"data": [{"id":1,"name":"王思聪",'telephone':"1234567891","community":"洪山区","address":"武汉","apartment":"两居室","product_id":1,"product":"地板","review_status":1,"note":"","created_at":1568974854},{"id":1,"name":"王思聪",'telephone':"1234567891","community":"洪山区","address":"武汉","apartment":"两居室","product_id":1,"product":"地板","review_status":1,"note":"","created_at":1568974854}]
 				  }
