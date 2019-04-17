@@ -11,7 +11,7 @@ class OrderFormAddHandler(BaseHandler):
              community_id: int = None,
              address: str = '',
              apartment: int = None,
-             product_ids: int = None,
+             product_ids: str = None,
              model: OrderFormModel = None
              ):
         if not name or not telephone or not address or not product_ids:
@@ -41,8 +41,8 @@ class OrderFormQueryHandler(BaseHandler):
 
     @authenticated
     @arguments
-    def get(self, review_status: int = None, page: int = 0, size: int = 20, model: OrderFormModel = None):
-        result, total = model.query_all_order_form(review_status, page, size)
+    def get(self, telephone:str = None, community_id:str = None, review_status: str = None, page: int = 0, size: int = 20, model: OrderFormModel = None):
+        result, total = model.query_all_order_form(telephone, community_id, review_status, page, size)
         self.finish({
             "code": 0,
             "msg": 'success',

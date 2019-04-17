@@ -9,8 +9,7 @@ class BasicUpdateHandler(BaseHandler):
     @arguments
     def post(self, id: int = None, topic: str = "", qr_code: str = '', contact: str = '',
              model:BasicModel=None):
-        model.update_basic_info(id, topic,
-                                ad_image, qr_code, contact)
+        model.update_basic_info(id, topic, qr_code, contact)
         self.finish({
             "code": 0,
             "msg": "success"

@@ -8,7 +8,7 @@ from core.utils import row2dict
 class BasicModel(MysqlModel):
 
     def update_basic_info(self, basic_id, topic,
-                          ad_image, qr_code, contact):
+                           qr_code, contact):
         self.session.begin()
         if basic_id is None:
             basic_info = BasicInfo(

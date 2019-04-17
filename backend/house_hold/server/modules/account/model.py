@@ -59,7 +59,7 @@ class AccountModel(MysqlModel):
 
     def query_account(self, user_id):
         if user_id is None:
-            result = self.session.query(Account).all()
+            result = self.session.query(Account).filter(Account.user_id != 1).all()
             return [row2dict(item) for item in result] if result else ''
         else:
             account = self.session.query(Account).filter(

@@ -28,16 +28,16 @@ class CommunityModel(MysqlModel):
             self.session.query(Community).filter(
                 Community.community_id == community_id
             ).update({
-                province_id: province_id and province_id or Community.province_id,
-                city_id: city_id and city_id or Community.city_id,
-                area: area and area or Community.area,
-                viewpager_0: viewpager_0 and viewpager_0 or Community.viewpager_0,
-                viewpager_1: viewpager_1 and viewpager_1 or Community.viewpager_1,
-                viewpager_2: viewpager_2 and viewpager_2 or Community.viewpager_2,
-                viewpager_3: viewpager_3 and viewpager_3 or Community.viewpager_3,
-                ad_image: ad_image and ad_image or Community.ad_image,
-                name: name and name or Community.name,
-                note: note and note or Community.note,
+                Community.province_id: province_id and province_id or Community.province_id,
+                Community.city_id: city_id and city_id or Community.city_id,
+                Community.area: area and area or Community.area,
+                Community.viewpager_0: viewpager_0 and viewpager_0 or Community.viewpager_0,
+                Community.viewpager_1: viewpager_1 and viewpager_1 or Community.viewpager_1,
+                Community.viewpager_2: viewpager_2 and viewpager_2 or Community.viewpager_2,
+                Community.viewpager_3: viewpager_3 and viewpager_3 or Community.viewpager_3,
+                Community.ad_image: ad_image and ad_image or Community.ad_image,
+                Community.name: name and name or Community.name,
+                Community.note: note and note or Community.note,
             })
         self.session.commit()
 

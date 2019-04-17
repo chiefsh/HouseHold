@@ -83,11 +83,17 @@ class ProductModel(MysqlModel):
         # 带转换类型和社区名，relationship
         if product_id is None:
             count = self.session.query(func.count(Product.product_id)).scalar()
-            query = self.session.query(Product).order_by(Product.is_top.desc(), Product.rank.asc())
+            query = self.session.query(Product).order_by(Product.is_top.desc(), Product.rank.asc(), Product.product_id)
             result = self.query_one_page(query, page, size)
             data = [row2dict(item) for item in result] if result else []
             for item in data:
                 import json
+                ids = item["category_ids"].split(",")
+                item["categorys"] = []
+                for id in ids:
+                    name = self.session.query(Category.name).filter(Category.category_id==int(id)).first()
+                    item["categorys"].append(name[0] if name else '')
+                item["categorys"] = json.dumps(item["categorys"])
                 item["category_id"]=json.dumps(item["category_ids"].split(","))
             return data, count
         else:

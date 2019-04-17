@@ -56,11 +56,13 @@ def row2dict(row):
 
 def check_file_exist(image_name):
     """判断文件是否存在"""
+    logging.info("file_path::::::%r", os.path.join(BASE_IMAGE_PATH, image_name))
     return os.path.isfile(os.path.join(BASE_IMAGE_PATH, image_name))
 
 
 def delete_image_file(image_name):
     try:
+        logging.info("file_path_delete::::::%r", os.path.join(BASE_IMAGE_PATH, image_name))
         sys.path.remove(os.path.join(BASE_IMAGE_PATH, image_name))
     except Exception as e:
         logging.info(e)

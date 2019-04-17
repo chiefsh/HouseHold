@@ -37,9 +37,10 @@ class CommunityDeleteHandler(BaseHandler):
 
     @authenticated
     @arguments
-    def delete(self, community_ids: int = None, model:CommunityModel=None):
+    def post(self, community_ids: str = None, model:CommunityModel=None):
         if not community_ids:
             raise ParametersError()
+        community_ids = community_ids.split(",")
         model.delete_community(community_ids)
         self.finish({
             "code": 0,
