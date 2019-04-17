@@ -172,7 +172,7 @@ class OrderForm(Base):
     community_id = Column(Integer, nullable=False, server_default=text("0"))
     address = Column(String(64), nullable=False, server_default=text("''"))
     apartment = Column(Integer, nullable=False, server_default=text("0"))
-    product_id = Column(Integer, nullable=False, server_default=text("0"))
+    product_id = Column(ObjID(12), nullable=False, server_default=text("''"))
     review_status = Column(Integer, nullable=False, server_default=text("0"))
     note = Column(String(128), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))
