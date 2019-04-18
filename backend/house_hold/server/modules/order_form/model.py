@@ -97,20 +97,30 @@ class OrderFormModel(MysqlModel):
                                                                                       "") + " " + str(item['product']) + " 拼团成功！")
         return detail_list
 
-    def get_group_order_form_info(self, community_id, category_id):
+    def _format_product(self, product):
+        product_id = product['product_id']
+        product['total_order'] = self._get_total_order_num(product_id)
+        product['pass_order'] = self._get_pass_order_num(product_id)
+        product['round'] = product['pass_order'] // product['group_number']  # 轮数
+        product['current_round_pass'] = product['pass_order'] % product['group_number']
+        product['remain_num'] = product['group_number'] - product['current_round_pass']
+        product['newest_orders'] = self._get_newest_orders(product_id)
+        return product
+
+    def get_group_order_form_info(self, community_id, category_id, product_id):
         query = self.session.query(Product)
-        if community_id:
-            query = query.filter(Product.community_id == community_id)
-        if category_id:
-            query = query.filter(Product.category_id == category_id)
-        product_list = query.all()
-        product_list = [row2dict(product) for product in product_list] if product_list else []
-        for product in product_list:
-            product_id = product['product_id']
-            product['total_order'] = self._get_total_order_num(product_id)
-            product['pass_order'] = self._get_pass_order_num(product_id)
-            product['round'] = product['pass_order'] // product['group_number']  # 轮数
-            product['current_round_pass'] = product['pass_order'] % product['group_number']
-            product['remain_num'] = product['group_number'] - product['current_round_pass']
-            product['newest_orders'] = self._get_newest_orders(product_id)
-        return product_list
+        if product_id is None:
+            if community_id:
+                query = query.filter(Product.community_id == community_id)
+            if category_id:
+                query = query.filter(Product.category_id == category_id)
+            product_list = query.all()
+            product_list = [row2dict(product) for product in product_list] if product_list else []
+            for product in product_list:
+                self._format_product(product)
+
+            return product_list
+        else:
+            product = query.first()
+            return self._format_product(product)
+

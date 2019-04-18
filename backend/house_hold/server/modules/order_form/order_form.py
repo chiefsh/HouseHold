@@ -41,7 +41,8 @@ class OrderFormQueryHandler(BaseHandler):
 
     @authenticated
     @arguments
-    def get(self, telephone:str = None, community_id:str = None, review_status: str = None, page: int = 0, size: int = 20, model: OrderFormModel = None):
+    def get(self, telephone: str = None, community_id: str = None, review_status: str = None, page: int = 0,
+            size: int = 20, model: OrderFormModel = None):
         result, total = model.query_all_order_form(telephone, community_id, review_status, page, size)
         self.finish({
             "code": 0,
@@ -66,8 +67,9 @@ class OrderFormDeleteHandler(BaseHandler):
 class OrderFormGroupHandler(BaseHandler):
 
     @arguments
-    def get(self, community_id: int = None, category_id: int = None, model: OrderFormModel = None):
-        result = model.get_group_order_form_info(community_id, category_id)
+    def get(self, community_id: int = None, category_id: int = None, product_id: str = None,
+            model: OrderFormModel = None):
+        result = model.get_group_order_form_info(community_id, category_id, product_id)
         self.finish({
             "code": 0,
             "msg": 'success',
