@@ -123,5 +123,9 @@ class OrderFormModel(MysqlModel):
             return product_list
         else:
             product = query.first()
+            if not product:
+                return ''
+            else:
+                product = row2dict(product)
             return self._format_product(product)
 
