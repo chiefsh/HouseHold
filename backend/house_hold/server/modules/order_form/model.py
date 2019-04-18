@@ -84,13 +84,14 @@ class OrderFormModel(MysqlModel):
                                                                         OrderForm.review_status == 1)).scalar()
 
     def _get_newest_orders(self, product_id):
-        order_list = self.session.query(OrderForm).filter(and_(
+        order_list = self.session.query(OrderFormNew).filter(and_(
             OrderForm.product_id == product_id,
             OrderForm.review_status == 1
         )).order_by(
             OrderForm.created_at.desc()
         ).limit(5).all()
         detail_list = list()
+        order_list = [row2dict(item) for item in order_list] if order_list else []
         for item in order_list:
             detail_list.append(str(item['name']) + " " + str(item["telephone"]) + " " + str(
                 item["community"]) + " " + item['address'] + " " + APARTMENT_DICT.get(item['apartment'],
