@@ -93,9 +93,10 @@ class OrderFormModel(MysqlModel):
         detail_list = list()
         order_list = [row2dict(item) for item in order_list] if order_list else []
         for item in order_list:
-            detail_list.append(str(item['name']) + " " + str(item["telephone"]) + " " + str(
-                item["community"]) + " " + item['address'] + " " + APARTMENT_DICT.get(item['apartment'],
-                                                                                      "") + " " + str(item['product']) + " 拼团成功！")
+            name = str(item['name']).replace(str(item['name'])[1:], len(str(item['name'])[1:]) * "*")
+            telephone = str(item["telephone"]).replace(str(item['telephone'])[3:8], 4 * "*") if len(
+                str(item["telephone"])) >= 11 else str(item["telephone"])
+            detail_list.append(str(item["community"]) + "的" + name + ", " + telephone + ", 拼团成功！")
         return detail_list
 
     def _format_product(self, product):
@@ -128,4 +129,3 @@ class OrderFormModel(MysqlModel):
             else:
                 product = row2dict(product)
             return self._format_product(product)
-
