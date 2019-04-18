@@ -5,7 +5,9 @@ from sqlalchemy import select, outerjoin, or_, func, and_, between, desc, join
 from core.base_model import MysqlModel
 from core.schema import Category, Product, OrderForm, Community
 from core.utils import row2dict
-APARTMENT_DICT = {0:"一居室", 1:"二居室", 2:"三居室"}
+
+APARTMENT_DICT = {0: "一居室", 1: "二居室", 2: "三居室"}
+
 
 class OrderFormNew(OrderForm):
     community = column_property(
@@ -53,9 +55,9 @@ class OrderFormModel(MysqlModel):
     def query_all_order_form(self, telephone, community_id, review_status, page, size):
         query = self.session.query(OrderFormNew)
         if telephone:
-           query = query.filter(OrderForm.telephone.like("%{}%".format(telephone)))
+            query = query.filter(OrderForm.telephone.like("%{}%".format(telephone)))
         if community_id or community_id == 0:
-           query = query.filter(OrderForm.community_id==int(community_id))
+            query = query.filter(OrderForm.community_id == int(community_id))
         if review_status or review_status == 0:
             query = query.filter(
                 OrderForm.review_status == int(review_status)
@@ -65,9 +67,50 @@ class OrderFormModel(MysqlModel):
         data = [row2dict(item) for item in result] if result else []
         for item in data:
             item["created_at"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(item["created_at"]))
-            item["order_form_detail"] = str(item['name']) + " " + str(item["telephone"]) + " " + str(item["community"]) + " " + item['address'] + " " + APARTMENT_DICT.get(item['apartment'], "") + " " + str(item['product'])
+            item["order_form_detail"] = str(item['name']) + " " + str(item["telephone"]) + " " + str(
+                item["community"]) + " " + item['address'] + " " + APARTMENT_DICT.get(item['apartment'],
+                                                                                      "") + " " + str(item['product'])
         return data, total
 
     def delete_order_form(self, order_ids):
         for id_ in order_ids:
             self.session.query(OrderForm).filter(OrderForm.id == int(id_)).delete()
+
+    def _get_total_order_num(self, product_id):
+        return self.session.query(func.count(OrderForm.id)).filter(OrderForm.product_id == product_id).scalar()
+
+    def _get_pass_order_num(self, product_id):
+        return self.session.query(func.count(OrderForm.id)).filter(and_(OrderForm.product_id == product_id,
+                                                                        OrderForm.review_status == 1)).scalar()
+
+    def _get_newest_orders(self, product_id):
+        order_list = self.session.query(OrderForm).filter(and_(
+            OrderForm.product_id == product_id,
+            OrderForm.review_status == 1
+        )).order_by(
+            OrderForm.created_at.desc()
+        ).limit(5).all()
+        detail_list = list()
+        for item in order_list:
+            detail_list.append(str(item['name']) + " " + str(item["telephone"]) + " " + str(
+                item["community"]) + " " + item['address'] + " " + APARTMENT_DICT.get(item['apartment'],
+                                                                                      "") + " " + str(item['product']) + " 拼团成功！")
+        return detail_list
+
+    def get_group_order_form_info(self, community_id, category_id):
+        query = self.session.query(Product)
+        if community_id:
+            query = query.filter(Product.community_id == community_id)
+        if category_id:
+            query = query.filter(Product.category_id == category_id)
+        product_list = query.all()
+        product_list = [row2dict(product) for product in product_list] if product_list else []
+        for product in product_list:
+            product_id = product['product_id']
+            product['total_order'] = self._get_total_order_num(product_id)
+            product['pass_order'] = self._get_pass_order_num(product_id)
+            product['round'] = product['pass_order'] // product['group_number']  # 轮数
+            product['current_round_pass'] = product['pass_order'] % product['group_number']
+            product['remain_num'] = product['group_number'] - product['current_round_pass']
+            product['newest_orders'] = self._get_newest_orders(product_id)
+        return product_list

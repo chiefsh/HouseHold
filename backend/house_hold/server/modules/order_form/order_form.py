@@ -61,3 +61,15 @@ class OrderFormDeleteHandler(BaseHandler):
             "code": 0,
             "msg": 'success',
         })
+
+
+class OrderFormGroupHandler(BaseHandler):
+
+    @arguments
+    def get(self, community_id: int = None, category_id: int = None, model: OrderFormModel = None):
+        result = model.get_group_order_form_info(community_id, category_id)
+        self.finish({
+            "code": 0,
+            "msg": 'success',
+            "data": result
+        })
