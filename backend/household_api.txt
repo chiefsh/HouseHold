@@ -336,12 +336,12 @@
                                     "rate": "20.00%",
                                     "market_price": 5,
                                     "is_top": 0,
-                                    "total_order": 2,
+                                    "total_order": 2,    #  参与人数
                                     "pass_order": 1,
-                                    "round": 0,
-                                    "current_round_pass": 1,
-                                    "remain_num": 11,
-                                    "newest_orders": [
+                                    "round": 0,          #  第几轮
+                                    "current_round_pass": 1,    #  当前轮已参加拼团人数
+                                    "remain_num": 11,    #  剩余拼团人数
+                                    "newest_orders": [    #  五条最新用户信息滚动
                                         "习近平 13909023234 默认社区1 8栋3单元9楼 三居室 测试产品名称1 拼团成功！"
                                     ]
                                 }
