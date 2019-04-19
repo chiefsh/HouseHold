@@ -121,11 +121,17 @@ class ProductModel(MysqlModel):
         under_rank = self.session.query(ProductBase.rank).filter(ProductBase.product_id == under_product_id).first()
         if not (above_rank and under_rank):
             return
+        above = above_rank[0]
+        under = under_rank[0]
+        mid = 99999
         self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).update({
-            ProductBase.rank: under_rank[0]
+            ProductBase.rank: mid
         }, synchronize_session=False)
         self.session.query(ProductBase.rank).filter(ProductBase.product_id == under_product_id).update({
-            ProductBase.rank: above_rank[0]
+            ProductBase.rank: above
+        }, synchronize_session=False)
+        self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).update({
+            ProductBase.rank: under
         }, synchronize_session=False)
         self.session.flush()
 

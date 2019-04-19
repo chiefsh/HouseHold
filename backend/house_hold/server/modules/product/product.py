@@ -75,8 +75,8 @@ class ProductIsTopHandler(BaseHandler):
 
     @authenticated
     @arguments
-    def post(self, product_id: int = None, is_top: int = None, model: ProductModel = None):
-        if is_top is None or product_id is None:
+    def post(self, product_id: str = None, is_top: int = None, model: ProductModel = None):
+        if not is_top or not  product_id:
             raise ParametersError("参数错误")
         model.top_product(product_id, is_top)
         self.finish({
@@ -89,7 +89,7 @@ class ProductSortedHandler(BaseHandler):
 
     @authenticated
     @arguments
-    def post(self, above_product_id: int = None, under_product_id: int = None, model: ProductModel = None):
+    def post(self, above_product_id: str = None, under_product_id: str = None, model: ProductModel = None):
         if above_product_id is None or under_product_id is None:
             raise ParametersError("参数错误")
         model.sorted_product_list(above_product_id, under_product_id)

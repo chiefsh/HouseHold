@@ -123,7 +123,7 @@ class OrderFormModel(MysqlModel):
 
             return product_list
         else:
-            product = query.first()
+            product = query.filter(Product.product_id==product_id).first()
             if not product:
                 return ''
             else:
