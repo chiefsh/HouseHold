@@ -67,7 +67,7 @@ class OrderFormDeleteHandler(BaseHandler):
 class OrderFormGroupHandler(BaseHandler):
 
     @arguments
-    def get(self, community_id: int = None, category_id: int = None, product_id: str = None,
+    def get(self, community_id: int = None, category_id: str = None, product_id: str = None,
             model: OrderFormModel = None):
         result = model.get_group_order_form_info(community_id, category_id, product_id)
         self.finish({

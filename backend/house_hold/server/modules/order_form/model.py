@@ -111,11 +111,11 @@ class OrderFormModel(MysqlModel):
 
     def get_group_order_form_info(self, community_id, category_id, product_id):
         query = self.session.query(Product)
-        if product_id is None:
+        if product_id is None or not product_id:
             if community_id:
                 query = query.filter(Product.community_id == community_id)
             if category_id:
-                query = query.filter(Product.category_id == category_id)
+                query = query.filter(Product.category_ids.like("%{}%".format(str(category_id))))
             product_list = query.all()
             product_list = [row2dict(product) for product in product_list] if product_list else []
             for product in product_list:
