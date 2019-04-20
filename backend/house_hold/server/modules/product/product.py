@@ -19,7 +19,7 @@ class ProductAddHandler(BaseHandler):
              rate: str = '',
              charge_unit: str = "",
              group_number: int = None,
-             community_id: int = None,
+             community_id: str = '',
              brief: str = "",
              sell_point: str = "",
              detail: str = "",
@@ -34,8 +34,6 @@ class ProductAddHandler(BaseHandler):
              ):
         if group_price is None or market_price is None or group_number is None or community_id is None:
             raise ParametersError()
-        if not category_id:
-            category_id = "1"
         model.add_product(product_id, name, category_id, group_price, market_price, rate, charge_unit, group_number,
                           community_id, brief, sell_point, detail, transport_sale, introduction, image_0, image_1,
                           image_2, image_3, image_4)

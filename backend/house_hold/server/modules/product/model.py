@@ -11,8 +11,8 @@ class Product(ProductBase):
     #category = column_property(
     #    select([Category.name]).where(and_(Category.category_id == ProductBase.category_id))
 
-    community = column_property(
-        select([Community.name]).where(and_(Community.community_id == ProductBase.community_id)))
+    # community = column_property(
+    #     select([Community.name]).where(and_(Community.community_id == ProductBase.community_id)))
 
 
 class ProductModel(MysqlModel):

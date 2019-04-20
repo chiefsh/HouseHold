@@ -113,7 +113,7 @@ class OrderFormModel(MysqlModel):
         query = self.session.query(Product)
         if product_id is None or not product_id:
             if community_id:
-                query = query.filter(Product.community_id == community_id)
+                query = query.filter(Product.community_id.like("%{}%".format(str(community_id))))
             if category_id:
                 query = query.filter(Product.category_ids.like("%{}%".format(str(category_id))))
             product_list = query.all()

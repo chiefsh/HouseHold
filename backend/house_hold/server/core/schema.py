@@ -100,7 +100,7 @@ class Product(Base):
     market_price = Column(Float, nullable=False, server_default=text("0"))
     charge_unit = Column(String(15), nullable=False, server_default=text("''"))
     group_number = Column(Integer, nullable=False, server_default=text("0"))
-    community_id = Column(Integer, nullable=False, server_default=text("0"))
+    community_id = Column(String(128), nullable=False, server_default=text("0"))
     brief = Column(String(128), nullable=False, server_default=text("''"))
     sell_point = Column(String(128), nullable=False, server_default=text("''"))
     detail = Column(String(1024), nullable=False, server_default=text("''"))
