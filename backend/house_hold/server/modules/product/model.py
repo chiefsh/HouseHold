@@ -83,7 +83,7 @@ class ProductModel(MysqlModel):
         # 带转换类型和社区名，relationship
         if product_id is None:
             count = self.session.query(func.count(Product.product_id)).scalar()
-            query = self.session.query(Product).order_by(Product.is_top.desc(), Product.rank.asc(), Product.product_id)
+            query = self.session.query(Product).order_by(Product.is_top.desc(), Product.created_at.desc())
             result = self.query_one_page(query, page, size)
             data = [row2dict(item) for item in result] if result else []
             for item in data:
@@ -112,7 +112,7 @@ class ProductModel(MysqlModel):
         if is_top:
             self.session.begin()
             self.session.query(ProductBase).filter(
-                ProductBase.product_id != product_id
+                ProductBase.is_top == 10
             ).update({
                 ProductBase.is_top: 0
             }, synchronize_session=False)
@@ -123,23 +123,41 @@ class ProductModel(MysqlModel):
             }, synchronize_session=False)
             self.session.commit()
 
+    # def sorted_product_list(self, above_product_id, under_product_id):
+    #     self.session.begin()
+    #     above_rank = self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).first()
+    #     under_rank = self.session.query(ProductBase.rank).filter(ProductBase.product_id == under_product_id).first()
+    #     if not (above_rank and under_rank):
+    #         return
+    #     above = above_rank[0]
+    #     under = under_rank[0]
+    #     mid = 99999
+    #     self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).update({
+    #         ProductBase.rank: mid
+    #     }, synchronize_session=False)
+    #     self.session.query(ProductBase.rank).filter(ProductBase.product_id == under_product_id).update({
+    #         ProductBase.rank: above
+    #     }, synchronize_session=False)
+    #     self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).update({
+    #         ProductBase.rank: under
+    #     }, synchronize_session=False)
+    #     self.session.commit()
+
     def sorted_product_list(self, above_product_id, under_product_id):
-        self.session.begin()
-        above_rank = self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).first()
-        under_rank = self.session.query(ProductBase.rank).filter(ProductBase.product_id == under_product_id).first()
+        above_rank = self.session.query(ProductBase.created_at).filter(ProductBase.product_id == above_product_id).first()
+        under_rank = self.session.query(ProductBase.created_at).filter(ProductBase.product_id == under_product_id).first()
         if not (above_rank and under_rank):
             return
         above = above_rank[0]
         under = under_rank[0]
-        mid = 99999
-        self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).update({
-            ProductBase.rank: mid
-        }, synchronize_session=False)
-        self.session.query(ProductBase.rank).filter(ProductBase.product_id == under_product_id).update({
-            ProductBase.rank: above
-        }, synchronize_session=False)
-        self.session.query(ProductBase.rank).filter(ProductBase.product_id == above_product_id).update({
+        self.session.begin()
+        self.session.query(ProductBase.created_at).filter(ProductBase.product_id == above_product_id).update({
             ProductBase.rank: under
         }, synchronize_session=False)
-        self.session.flush()
+        self.session.commit()
+        self.session.begin()
+        self.session.query(ProductBase.created_at).filter(ProductBase.product_id == under_product_id).update({
+            ProductBase.rank: above
+        }, synchronize_session=False)
+        self.session.commit()
 
