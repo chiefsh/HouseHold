@@ -7,7 +7,7 @@ from core.utils import row2dict
 
 class CommunityModel(MysqlModel):
 
-    def add_community(self, community_id, province_id, city_id, area, viewpager_0, viewpager_1, viewpager_2, viewpager_3, ad_image,  name, note):
+    def add_community(self, community_id, province_id, city_id, area, viewpager_0, viewpager_1, viewpager_2, viewpager_3, ad_image,  name, note, link_0, link_1, link_2, link_3):
         self.session.begin()
         if community_id is None:
             community = Community(
@@ -21,7 +21,11 @@ class CommunityModel(MysqlModel):
                 ad_image=ad_image,
                 name=name,
                 note=note,
-                created_at=int(time.time())
+                created_at=int(time.time()),
+                link_0=link_0,
+                link_1=link_1,
+                link_2=link_2,
+                link_3=link_3
             )
             self.session.add(community)
         else:
@@ -38,6 +42,10 @@ class CommunityModel(MysqlModel):
                 Community.ad_image: ad_image and ad_image or Community.ad_image,
                 Community.name: name and name or Community.name,
                 Community.note: note and note or Community.note,
+                Community.link_0: link_0 and link_0 or Community.link_0,
+                Community.link_1: link_1 and link_1 or Community.link_1,
+                Community.link_2: link_2 and link_2 or Community.link_2,
+                Community.link_3: link_3 and link_3 or Community.link_3
             })
         self.session.commit()
 

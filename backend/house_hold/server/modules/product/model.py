@@ -13,7 +13,7 @@ class Product(ProductBase):
 
     # community = column_property(
     #     select([Community.name]).where(and_(Community.community_id == ProductBase.community_id)))
-
+    pass
 
 class ProductModel(MysqlModel):
 
@@ -95,6 +95,9 @@ class ProductModel(MysqlModel):
                     item["categorys"].append(name[0] if name else '')
                 item["categorys"] = json.dumps(item["categorys"])
                 item["category_id"]=json.dumps(item["category_ids"].split(","))
+                ids = item["community_id"].split(',')
+                item["community_id"] = json.dumps(ids)
+                    
             return data, count
         else:
             result = self.session.query(Product).filter(

@@ -146,6 +146,10 @@ class Community(Base):
     name = Column(String(128), nullable=False, server_default=text("''"))
     note = Column(String(512), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))
+    link_0 =  Column(String(128), nullable=False, server_default=text("''"))
+    link_1 =  Column(String(128), nullable=False, server_default=text("''"))
+    link_2 =  Column(String(128), nullable=False, server_default=text("''"))
+    link_3 =  Column(String(128), nullable=False, server_default=text("''"))
 
 
 class Region(Base):

@@ -9,11 +9,11 @@ class CommunityAddHandler(BaseHandler):
     @arguments
     def post(self, community_id: int = None, province_id: int = None, city_id: int = None, area: int = None,
              viewpager_0:str = "", viewpager_1:str = '', viewpager_2:str = '', viewpager_3:str = '', ad_image:str = '',
-             name: str = '', note: str = '',
+             name: str = '', note: str = '', link_0: str = '', link_1: str = "", link_2: str = '', link_3 : str = '',
              model: CommunityModel = None):
         if province_id is None or city_id is None:
             raise ParametersError()
-        model.add_community(community_id, province_id, city_id, area, viewpager_0, viewpager_1, viewpager_2, viewpager_3, ad_image, name, note)
+        model.add_community(community_id, province_id, city_id, area, viewpager_0, viewpager_1, viewpager_2, viewpager_3, ad_image, name, note, link_0, link_1, link_2, link_3)
         self.finish({
             "code": 0,
             "msg": "success",

@@ -62,6 +62,7 @@ class OrderFormModel(MysqlModel):
             query = query.filter(
                 OrderForm.review_status == int(review_status)
             )
+        query = query.order_by(OrderForm.created_at.desc())
         result = self.query_one_page(query, page, size)
         total = self.query_total(query)
         data = [row2dict(item) for item in result] if result else []
