@@ -7,7 +7,8 @@ from core.utils import row2dict
 
 class CommunityModel(MysqlModel):
 
-    def add_community(self, community_id, province_id, city_id, area, viewpager_0, viewpager_1, viewpager_2, viewpager_3, ad_image,  name, note, link_0, link_1, link_2, link_3):
+    def add_community(self, community_id, province_id, city_id, area, viewpager_0, viewpager_1, viewpager_2,
+                      viewpager_3, ad_image, name, note, link_0, link_1, link_2, link_3):
         self.session.begin()
         if community_id is None:
             community = Community(
@@ -50,13 +51,14 @@ class CommunityModel(MysqlModel):
         self.session.commit()
 
     def get_region_name(self, region_id):
-        result = self.session.query(Region.name).filter(Region.id==int(region_id)).first()
+        result = self.session.query(Region.name).filter(Region.id == int(region_id)).first()
         return result[0] if result else ''
 
     def query_community_info(self, community_id, page, size):
         if community_id is None:
             query = self.session.query(Community)
             total = self.query_total(query)
+            query = query.order_by(Community.is_top.desc(), Community.created_at.desc())
             result = self.query_one_page(query, page, size)
             data = [row2dict(item) for item in result] if result else []
             for item in data:
@@ -77,4 +79,40 @@ class CommunityModel(MysqlModel):
 
     def delete_community(self, community_ids):
         for id_ in community_ids:
-            self.session.query(Community).filter(Community.community_id==id_).delete()
+            self.session.query(Community).filter(Community.community_id == id_).delete()
+
+    def handle_is_top(self, community_id, is_top):
+        if is_top:
+            self.session.begin()
+            self.session.query(Community.is_top).filter(Community.is_top == 10).update({
+                Community.is_top: 0
+            }, synchronize_session=False)
+            self.session.query(Community.is_top).filter(Community.community_id == community_id).update({
+                Community.is_top: 10
+            }, synchronize_session=False)
+            self.session.commit()
+
+    def handle_sort_list(self, above_community_id, under_community_id):
+        above = self.session.query(Community.created_at, Community.is_top).filter(
+            Community.community_id == above_community_id).first()
+        under = self.session.query(Community.created_at).filter(Community.community_id == under_community_id).first()
+        if not (above and under):
+            return
+        if above[1] == 10:
+            self.session.begin()
+            self.session.query(Community.is_top).filter(Community.community_id == above_community_id).update({
+                Community.is_top: 0
+            }, synchronize_session=False)
+            self.session.commit()
+        above = above[0]
+        under = under[0]
+        self.session.begin()
+        self.session.query(Community.created_at).filter(Community.community_id == above_community_id).update({
+            Community.created_at: under
+        }, synchronize_session=False)
+        self.session.commit()
+        self.session.begin()
+        self.session.query(Community.created_at).filter(Community.community_id == under_community_id).update({
+            Community.created_at: above
+        }, synchronize_session=False)
+        self.session.commit()

@@ -46,3 +46,30 @@ class CommunityDeleteHandler(BaseHandler):
             "code": 0,
             "msg": 'success'
         })
+
+
+class CommunityIsTopHandler(BaseHandler):
+
+    @authenticated
+    @arguments
+    def post(self, community_id:int = None, is_top:int = None, model:CommunityModel=None):
+        if not community_id:
+            raise ParametersError()
+        model.handle_is_top(community_id, is_top)
+        self.finish({
+            "code": 0,
+            "msg": 'success'
+        })
+
+class CommunitySortHandler(BaseHandler):
+
+    @authenticated
+    @arguments
+    def post(self, above_community_id:int = None, under_community_id:int = None, model:CommunityModel=None):
+        if not (above_community_id and under_community_id):
+            raise ParametersError()
+        model.handle_sort_list(above_community_id, under_community_id)
+        self.finish({
+            "code": 0,
+            "msg": 'success'
+        })

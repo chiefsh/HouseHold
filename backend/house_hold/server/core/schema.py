@@ -130,6 +130,7 @@ class Category(Base):
     category_id = Column(Integer, primary_key=True)
     name = Column(String(64), nullable=False, server_default=text("''"))
     created_at = Column(Integer, nullable=False, server_default=text("0"))
+    is_top = Column(Integer, nullable=False, server_default=text("0"))
 
 
 class Community(Base):
@@ -150,6 +151,7 @@ class Community(Base):
     link_1 =  Column(String(128), nullable=False, server_default=text("''"))
     link_2 =  Column(String(128), nullable=False, server_default=text("''"))
     link_3 =  Column(String(128), nullable=False, server_default=text("''"))
+    is_top = Column(Integer, nullable=False, server_default=text("0"))
 
 
 class Region(Base):

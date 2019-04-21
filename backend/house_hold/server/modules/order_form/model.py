@@ -118,7 +118,7 @@ class OrderFormModel(MysqlModel):
             if category_id:
                 query = query.filter(Product.category_ids.like("%{}%".format(str(category_id))))
             product_list = query.order_by(
-                Product.is_top.desc(), Product.rank.desc(), Product.created_at.desc()
+                Product.is_top.desc(), Product.created_at.desc()
             ).all()
             product_list = [row2dict(product) for product in product_list] if product_list else []
             for product in product_list:
