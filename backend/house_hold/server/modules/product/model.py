@@ -112,9 +112,14 @@ class ProductModel(MysqlModel):
         if is_top:
             self.session.begin()
             self.session.query(ProductBase).filter(
+                ProductBase.product_id != product_id
+            ).update({
+                ProductBase.is_top: 0
+            }, synchronize_session=False)
+            self.session.query(ProductBase).filter(
                 ProductBase.product_id == product_id
             ).update({
-                ProductBase.is_top: int(time.time())
+                ProductBase.is_top: 10
             }, synchronize_session=False)
             self.session.commit()
 
