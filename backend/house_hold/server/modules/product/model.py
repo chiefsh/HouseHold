@@ -144,20 +144,26 @@ class ProductModel(MysqlModel):
     #     self.session.commit()
 
     def sorted_product_list(self, above_product_id, under_product_id):
-        above_rank = self.session.query(ProductBase.created_at).filter(ProductBase.product_id == above_product_id).first()
+        above_rank = self.session.query(ProductBase.created_at, ProductBase.is_top).filter(ProductBase.product_id == above_product_id).first()
         under_rank = self.session.query(ProductBase.created_at).filter(ProductBase.product_id == under_product_id).first()
         if not (above_rank and under_rank):
             return
+        if above_rank[1] == 10:
+            self.session.begin()
+            self.session.query(ProductBase.created_at).filter(ProductBase.product_id == above_product_id).update({
+                ProductBase.is_top: 0
+            }, synchronize_session=False)
+            self.session.commit()
         above = above_rank[0]
         under = under_rank[0]
         self.session.begin()
         self.session.query(ProductBase.created_at).filter(ProductBase.product_id == above_product_id).update({
-            ProductBase.rank: under
+            ProductBase.created_at: under
         }, synchronize_session=False)
         self.session.commit()
         self.session.begin()
         self.session.query(ProductBase.created_at).filter(ProductBase.product_id == under_product_id).update({
-            ProductBase.rank: above
+            ProductBase.created_at: above
         }, synchronize_session=False)
         self.session.commit()
 
