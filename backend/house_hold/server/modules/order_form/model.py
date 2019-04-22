@@ -105,8 +105,10 @@ class OrderFormModel(MysqlModel):
         product_id = product['product_id']
         product['total_order'] = self._get_total_order_num(product_id)
         product['pass_order'] = self._get_pass_order_num(product_id)
-        product['round'] = math.ceil(product['pass_order'] / product['group_number'])  # 轮数
         product['current_round_pass'] = product['pass_order'] % product['group_number']
+        product['round'] = math.ceil(product['pass_order'] / product['group_number']) + 1 if product[
+                                                                                                 'current_round_pass'] == 0 else math.ceil(
+            product['pass_order'] / product['group_number'])  # 轮数
         product['remain_num'] = product['group_number'] - product['current_round_pass']
         product['newest_orders'] = self._get_newest_orders(product_id)
         return product
@@ -127,7 +129,7 @@ class OrderFormModel(MysqlModel):
 
             return product_list
         else:
-            product = query.filter(Product.product_id==product_id).first()
+            product = query.filter(Product.product_id == product_id).first()
             if not product:
                 return ''
             else:
