@@ -8,18 +8,19 @@ from core.utils import row2dict
 
 
 class Product(ProductBase):
-    #category = column_property(
+    # category = column_property(
     #    select([Category.name]).where(and_(Category.category_id == ProductBase.category_id))
 
     # community = column_property(
     #     select([Community.name]).where(and_(Community.community_id == ProductBase.community_id)))
     pass
 
+
 class ProductModel(MysqlModel):
 
     def add_product(self, product_id, name, category_id, group_price, market_price, rate, charge_unit, group_member,
-                          community_id, brief, sell_point, detail, transport_sale, introduction, image_0, image_1,
-                          image_2, image_3, image_4):
+                    community_id, brief, sell_point, detail, transport_sale, introduction, image_0, image_1,
+                    image_2, image_3, image_4):
         self.session.begin()
         if product_id:
             self.session.query(ProductBase).filter(
@@ -47,7 +48,7 @@ class ProductModel(MysqlModel):
             }, synchronize_session=False)
         else:
             product = ProductBase(
-                product_id= ObjID.new_id(),
+                product_id=ObjID.new_id(),
                 name=name,
                 category_ids=category_id,
                 group_price=group_price,
@@ -83,21 +84,28 @@ class ProductModel(MysqlModel):
         # 带转换类型和社区名，relationship
         if product_id is None:
             count = self.session.query(func.count(Product.product_id)).scalar()
-            query = self.session.query(Product).order_by(Product.is_top.desc(), Product.created_at.desc())
+            query = self.session.query(Product.product_id, Product.name, Product.category_ids, Product.image_0,
+                                       Product.image_1,
+                                       Product.image_2, Product.image_3, Product.image_4,
+                                       Product.community_id).order_by(
+                Product.is_top.desc(), Product.created_at.desc())
             result = self.query_one_page(query, page, size)
-            data = [row2dict(item) for item in result] if result else []
+            data = [{"product_id": item[0], "name": item[1], "category_ids": item[2], "image_0": item[3],
+                     "image_1": item[4], "image_2": item[5], "image_3": item[6], "image_4": item[7],
+                     "community_id": item[8]} for item in result] if result else []
+            # data = [row2dict(item) for item in result] if result else []
             for item in data:
                 import json
                 ids = item["category_ids"].split(",")
                 item["categorys"] = []
                 for id in ids:
-                    name = self.session.query(Category.name).filter(Category.category_id==int(id)).first()
+                    name = self.session.query(Category.name).filter(Category.category_id == int(id)).first()
                     item["categorys"].append(name[0] if name else '')
                 item["categorys"] = json.dumps(item["categorys"])
-                item["category_id"]=json.dumps(item["category_ids"].split(","))
+                item["category_id"] = json.dumps(item["category_ids"].split(","))
                 ids = item["community_id"].split(',')
                 item["community_id"] = json.dumps(ids)
-                    
+
             return data, count
         else:
             result = self.session.query(Product).filter(
@@ -144,8 +152,10 @@ class ProductModel(MysqlModel):
     #     self.session.commit()
 
     def sorted_product_list(self, above_product_id, under_product_id):
-        above_rank = self.session.query(ProductBase.created_at, ProductBase.is_top).filter(ProductBase.product_id == above_product_id).first()
-        under_rank = self.session.query(ProductBase.created_at).filter(ProductBase.product_id == under_product_id).first()
+        above_rank = self.session.query(ProductBase.created_at, ProductBase.is_top).filter(
+            ProductBase.product_id == above_product_id).first()
+        under_rank = self.session.query(ProductBase.created_at).filter(
+            ProductBase.product_id == under_product_id).first()
         if not (above_rank and under_rank):
             return
         if above_rank[1] == 10:
@@ -166,4 +176,3 @@ class ProductModel(MysqlModel):
             ProductBase.created_at: above
         }, synchronize_session=False)
         self.session.commit()
-
