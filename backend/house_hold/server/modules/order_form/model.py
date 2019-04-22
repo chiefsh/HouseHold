@@ -1,3 +1,4 @@
+import math
 import time
 from sqlalchemy.orm import relationship, joinedload, lazyload, column_property, foreign, aliased
 from sqlalchemy import select, outerjoin, or_, func, and_, between, desc, join
@@ -104,7 +105,7 @@ class OrderFormModel(MysqlModel):
         product_id = product['product_id']
         product['total_order'] = self._get_total_order_num(product_id)
         product['pass_order'] = self._get_pass_order_num(product_id)
-        product['round'] = product['pass_order'] // product['group_number']  # 轮数
+        product['round'] = math.ceil(product['pass_order'] / product['group_number'])  # 轮数
         product['current_round_pass'] = product['pass_order'] % product['group_number']
         product['remain_num'] = product['group_number'] - product['current_round_pass']
         product['newest_orders'] = self._get_newest_orders(product_id)
