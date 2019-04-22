@@ -29,7 +29,8 @@ class ImageModel(MysqlModel):
 
     def delete_image(self, image_name):
         if check_file_exist(image_name):
-            return "{} 不存在"
-        else:
             delete_image_file(image_name)
             return True
+
+        else:
+            return "{} 不存在"
