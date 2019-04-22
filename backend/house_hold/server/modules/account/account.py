@@ -11,17 +11,18 @@ class LoginHandler(BaseHandler):
     def post(self, username: str = '', password: str = '', model: AccountModel = None):
         result = model.login(username, password)
         if result:
-            sid = model.update_sid(result['user_id'])
-            self.clear_cookie("__sid__")
+            # sid = model.update_sid(result['user_id'])
+            sid = self.gen_session_id(result['user_id'])
+            # self.clear_cookie("__sid__")
             # self.set_secure_cookie('__sid__', sid)
-            self.set_cookie(
-                name="__sid__",
-                value=sid,
-                path="/",
-                expires_days=30,  # 过期时间设置为1个月
-            )
-            self.set_header('X-Session-Id', sid)
-            logging.info("sid::::%r", self.get_secure_cookie("__sid__"))
+            # self.set_cookie(
+            #     name="__sid__",
+            #     value=sid,
+            #     path="/",
+            #     expires_days=30,  # 过期时间设置为1个月
+            # )
+            # self.set_header('X-Session-Id', sid)
+            logging.info("sid::::%r", sid)
             return self.finish({
                 "code": 0,
                 "msg": "登录成功",

@@ -30,8 +30,8 @@ def load_config():
     define("RABBIT_MQ_PORT", default=5672)
 
     # Redis 配置
-    define("REDIS_HOST", default="redis")
-    define("REDIS_PORT", default=16379)
+    define("REDIS_HOST", default="127.0.0.1")
+    define("REDIS_PORT", default=6379)
     define("REDIS_DB", default=1)
     define("REDIS_NAMESPACE", default="shield")
 

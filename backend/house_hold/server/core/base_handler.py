@@ -19,16 +19,25 @@ from .exception import (
     PermissionDenied,
     InternalError,
 )
-from core.schema import CacheData
+# from core.schema import CacheData
 
 
 class SessionHandler(RequestHandler):
+
+    # def get_current_user(self):
+    #     """根据cookie信息从redis中获取用户身份"""
+    #     session_id = self.request.headers.get('X-Session-Id') or self.get_cookie('__sid__')
+    #     if session_id:
+    #         return session_id
+    #     return None
 
     def get_current_user(self):
         """根据cookie信息从redis中获取用户身份"""
         session_id = self.request.headers.get('X-Session-Id') or self.get_cookie('__sid__')
         if session_id:
-            return session_id
+            user_id = redis_cli().get('{}:sid:{}'.format(options.REDIS_NAMESPACE, session_id))
+            if user_id:
+                return user_id.decode()
         return None
 
     def gen_session_id(self, user_id=''):
@@ -103,22 +112,34 @@ def authenticated(method):
             self.set_status(401, "请登录!")
             self.finish({"code": -1, "msg": "请登录!"})
             return None
-        try:
-            model = MysqlModel()
-            cache = model.session.query(CacheData).filter(CacheData.sid == self.current_user).first()
-            if not cache:
-                self.set_status(401, "请登录!")
-                self.finish({"code": -1, "msg": "请登录!"})
-                return None
-            else:
-                if int(cache.deadline) < int(time.time()):
-                    self.set_status(401, "请登录!")
-                    self.finish({"code": -1, "msg": "请登录!"})
-                    return None
-        except Exception as e:
-            logging.error("update visit time and source failed..., and error reason:%r", e)
         return method(self, *args, **kwargs)
     return wrapper
+
+
+# def authenticated(method):
+#     """检查是否登录"""
+#     @functools.wraps(method)
+#     def wrapper(self, *args, **kwargs):
+#         if not self.current_user:
+#             self.set_status(401, "请登录!")
+#             self.finish({"code": -1, "msg": "请登录!"})
+#             return None
+#         try:
+#             model = MysqlModel()
+#             cache = model.session.query(CacheData).filter(CacheData.sid == self.current_user).first()
+#             if not cache:
+#                 self.set_status(401, "请登录!")
+#                 self.finish({"code": -1, "msg": "请登录!"})
+#                 return None
+#             else:
+#                 if int(cache.deadline) < int(time.time()):
+#                     self.set_status(401, "请登录!")
+#                     self.finish({"code": -1, "msg": "请登录!"})
+#                     return None
+#         except Exception as e:
+#             logging.error("update visit time and source failed..., and error reason:%r", e)
+#         return method(self, *args, **kwargs)
+#     return wrapper
 
 
 class JsonHandler(SessionHandler):
