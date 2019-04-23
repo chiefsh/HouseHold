@@ -83,9 +83,17 @@ class ProductModel(MysqlModel):
         # 带转换类型和社区名，relationship
         if product_id is None:
             count = self.session.query(func.count(Product.product_id)).scalar()
-            query = self.session.query(Product).order_by(Product.is_top.desc(), Product.created_at.desc())
+            #query = self.session.query(Product).order_by(Product.is_top.desc(), Product.created_at.desc())
+            query = self.session.query(Product.product_id, Product.name, Product.category_ids, Product.image_0,
+                                       Product.image_1,
+                                       Product.image_2, Product.image_3, Product.image_4,
+                                       Product.community_id).order_by(
+                Product.is_top.desc(), Product.created_at.desc())
             result = self.query_one_page(query, page, size)
-            data = [row2dict(item) for item in result] if result else []
+            #data = [row2dict(item) for item in result] if result else []
+            data = [{"product_id": item[0], "name": item[1], "category_ids": item[2], "image_0": item[3],
+                     "image_1": item[4], "image_2": item[5], "image_3": item[6], "image_4": item[7],
+                     "community_id": item[8]} for item in result] if result else []
             for item in data:
                 import json
                 ids = item["category_ids"].split(",")
@@ -106,6 +114,7 @@ class ProductModel(MysqlModel):
             data = row2dict(result) if result else ''
             if data:
                 data['category_id'] = data['category_ids'].split(",")
+                data['community_id'] = data['community_id'].split(',')
             return data, 0
 
     def top_product(self, product_id, is_top):
