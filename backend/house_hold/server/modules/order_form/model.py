@@ -117,7 +117,9 @@ class OrderFormModel(MysqlModel):
         query = self.session.query(Product.product_id, Product.name, Product.category_ids, Product.image_0,
                                    Product.image_1,
                                    Product.image_2, Product.image_3, Product.image_4,
-                                   Product.community_id, Product.group_number)
+                                   Product.community_id, Product.group_number, Product.group_price,
+                                   Product.market_price,
+                                   Product.charge_unit, Product.rate)
         if product_id is None or not product_id:
             if community_id:
                 query = query.filter(Product.community_id.like("%{}%".format(str(community_id))))
@@ -128,8 +130,10 @@ class OrderFormModel(MysqlModel):
             ).all()
             # product_list = [row2dict(product) for product in product_list] if product_list else []
             product_list = [{"product_id": item[0], "name": item[1], "category_ids": item[2], "image_0": item[3],
-                     "image_1": item[4], "image_2": item[5], "image_3": item[6], "image_4": item[7],
-                     "community_id": item[8], "group_number": item[9]} for item in product_list] if product_list else []
+                             "image_1": item[4], "image_2": item[5], "image_3": item[6], "image_4": item[7],
+                             "community_id": item[8], "group_number": item[9], "group_price": item[10],
+                             "market_price": item[11], "charge_unit": item[12], "rate": item[13]} for item in
+                            product_list] if product_list else []
             for product in product_list:
                 self._format_product(product)
 
