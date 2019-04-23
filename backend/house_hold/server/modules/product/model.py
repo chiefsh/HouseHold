@@ -84,10 +84,6 @@ class ProductModel(MysqlModel):
         # 带转换类型和社区名，relationship
         if product_id is None:
             count = self.session.query(func.count(Product.product_id)).scalar()
-<<<<<<< HEAD
-            #query = self.session.query(Product).order_by(Product.is_top.desc(), Product.created_at.desc())
-=======
->>>>>>> 3243abe1f70e38848b8932bd6943657da88bcd1f
             query = self.session.query(Product.product_id, Product.name, Product.category_ids, Product.image_0,
                                        Product.image_1,
                                        Product.image_2, Product.image_3, Product.image_4,
