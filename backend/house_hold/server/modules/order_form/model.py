@@ -114,13 +114,13 @@ class OrderFormModel(MysqlModel):
         return product
 
     def get_group_order_form_info(self, community_id, category_id, product_id):
-        query = self.session.query(Product.product_id, Product.name, Product.category_ids, Product.image_0,
-                                   Product.image_1,
-                                   Product.image_2, Product.image_3, Product.image_4,
-                                   Product.community_id, Product.group_number, Product.group_price,
-                                   Product.market_price,
-                                   Product.charge_unit, Product.rate)
         if product_id is None or not product_id:
+            query = self.session.query(Product.product_id, Product.name, Product.category_ids, Product.image_0,
+                                       Product.image_1,
+                                       Product.image_2, Product.image_3, Product.image_4,
+                                       Product.community_id, Product.group_number, Product.group_price,
+                                       Product.market_price,
+                                       Product.charge_unit, Product.rate)
             if community_id:
                 query = query.filter(Product.community_id.like("%{}%".format(str(community_id))))
             if category_id:
@@ -139,6 +139,7 @@ class OrderFormModel(MysqlModel):
 
             return product_list
         else:
+            query = self.session.query(Product)
             product = query.filter(Product.product_id == product_id).first()
             if not product:
                 return ''
