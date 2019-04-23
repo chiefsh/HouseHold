@@ -120,7 +120,7 @@ class OrderFormModel(MysqlModel):
                                        Product.image_2, Product.image_3, Product.image_4,
                                        Product.community_id, Product.group_number, Product.group_price,
                                        Product.market_price,
-                                       Product.charge_unit, Product.rate)
+                                       Product.charge_unit, Product.rate).filter(Product.deleted == 0)
             if community_id:
                 query = query.filter(Product.community_id.like("%{}%".format(str(community_id))))
             if category_id:

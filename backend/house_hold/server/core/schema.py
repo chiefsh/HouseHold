@@ -115,6 +115,7 @@ class Product(Base):
     created_at = Column(Integer, nullable=False, server_default=text("0"))
     is_top = Column(Integer, nullable=False, server_default=text("0"))
     rank = Column(Integer, primary_key=True)
+    deleted = Column(Integer, nullable=False, server_default=text("0"))
 
 
 class CacheData(Base):

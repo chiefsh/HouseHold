@@ -77,7 +77,9 @@ class ProductModel(MysqlModel):
         for _id in product_ids:
             self.session.query(ProductBase).filter(
                 ProductBase.product_id == _id
-            ).delete()
+            ).update({
+                ProductBase.deleted: 1
+            }, synchronize_session=False)
         self.session.commit()
 
     def query_product(self, product_id, page, size):
@@ -87,7 +89,9 @@ class ProductModel(MysqlModel):
             query = self.session.query(Product.product_id, Product.name, Product.category_ids, Product.image_0,
                                        Product.image_1,
                                        Product.image_2, Product.image_3, Product.image_4,
-                                       Product.community_id).order_by(
+                                       Product.community_id).filter(
+                Product.deleted == 0
+            ).order_by(
                 Product.is_top.desc(), Product.created_at.desc())
             result = self.query_one_page(query, page, size)
             data = [{"product_id": item[0], "name": item[1], "category_ids": item[2], "image_0": item[3],
